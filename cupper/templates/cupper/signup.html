@@ -1,12 +1,16 @@
-<h1>Регистрация</h1>
-<form method="post">
+{% extends 'cupper/base.html' %}
+{% block content %}
+    <div class="container align-items-start" style="text-align: center">
+    <h1>Регистрация</h1><br/>
+<form method="post" class="form-group" style="vertical-align: middle">
     {%  csrf_token %}
     {% for field in form %}
-        <div>
+        <div class="form-group">
+            {{ field }}
             {{ field.errors }}
-            {{ field.label_tag }} {{ field }}
-            {{ field.help_text }}
         </div>
     {% endfor %}
-    <input type="submit" value="Регистрация" />
+    <input class="btn btn-primary" type="submit" value="Регистрация" style="align-content: left"/>
 </form>
+    </div>
+{% endblock %}

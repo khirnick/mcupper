@@ -1,0 +1,32 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8" />
+        <title>mcupper</title>
+        <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+        <style>
+            body {
+                padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+            }
+        </style>
+        <script src="{% static 'jquery/jquery-3.2.1.min.js' %} " type="text/javascript"></script>
+        <script src="{% static 'popper/popper.js' %} " type="text/javascript"></script>
+        <script src="{% static 'bootstrap/js/bootstrap.js' %} " type="text/javascript"></script>
+        {% block extrahead %}
+        {% endblock %}
+        <script type="text/javascript">
+        $(function(){
+        {% block jquery %}
+        {% endblock %}
+        });
+        </script>
+    </head>
+<body>
+
+<div class="container">
+     {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

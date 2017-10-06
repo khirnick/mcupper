@@ -64,3 +64,7 @@ def activate(request, uidb64, token):
         return redirect('/activation_success')
     else:
         return render(request, 'cupper/activation_bad_token.html')
+
+
+def activation_success(request):
+    return render(request, 'cupper/activation_success.html')
