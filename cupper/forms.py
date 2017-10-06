@@ -8,8 +8,8 @@ class SignupForm(forms.Form):
     username = forms.CharField(max_length=30, label='Логин',
                                help_text='Логин должен состоять не более чем из 30 сиволов',
                                widget=forms.TextInput(attrs={'placeholder': 'Логин'}))
-    email = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'your_email@example.com'}),
-                            label='Email', help_text='Введите Ваш e-mail')
+    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'your_email@example.com'}),
+                             label='Email', help_text='Введите Ваш e-mail')
 
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}), label='Пароль',
                                help_text='Пароль должен содержать минимум 4 символа')
