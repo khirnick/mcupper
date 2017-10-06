@@ -2,8 +2,9 @@ from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
@@ -37,7 +38,7 @@ def signup(request):
             email = EmailMessage(message_subject, message_to_send, to=[email_address])
             email.send()
 
-            return render(request, 'cupper/signup_succes.html')
+            return HttpResponseRedirect('/signup_success')
 
     else:
         form = SignupForm()
@@ -46,7 +47,7 @@ def signup(request):
 
 
 def signup_success(request):
-    return render(request, 'cupper/signup_succes.html')
+    return render(request, 'cupper/signup_success.html')
 
 
 def activate(request, uidb64, token):
@@ -60,6 +61,6 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
 
-        return render(request, 'cupper/activation_success.html')
+        return redirect('/activation_success')
     else:
-        return HttpResponse('Bad token')
+        return render(request, 'cupper/activation_bad_token.html')

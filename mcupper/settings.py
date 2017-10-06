@@ -55,7 +55,7 @@ ROOT_URLCONF = 'mcupper.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), '/home/khirnick/Projects/Python/mcupper/cupper/templates']
         ,
         'APP_DIRS': True,
         'OPTIONS': {

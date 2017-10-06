@@ -1,4 +1,4 @@
 Привет, {{ user.username }}!
 Мы рады приветствовать Вас на нашем сайте!
 
-Для активации аккаунта, пожалуйста, перейдите по токену: http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+Для активации аккаунта, пожалуйста, перейдите по: http://{{ domain }}{% url 'cupper:activate' uidb64=uid token=token %}
