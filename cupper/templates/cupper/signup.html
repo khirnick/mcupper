@@ -1,7 +1,7 @@
 {% extends 'cupper/base.html' %}
 {% block content %}
-    <div class="container align-items-start" style="text-align: center">
-    <h1>Регистрация</h1><br/>
+    <div class="container align-items-start white-text" style="text-align: center">
+    <h1 class="white-text">Регистрация</h1><br/>
 <form method="post" class="form-group" style="vertical-align: middle">
     {%  csrf_token %}
     {% for field in form %}
