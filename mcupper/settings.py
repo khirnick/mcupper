@@ -130,3 +130,6 @@ EMAIL_HOST_USER = 'mcupperactivation@gmail.com'
 EMAIL_HOST_PASSWORD = 'mcproject387'
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+MEDIA_ROOT = os.path.join('media')
+MEDIA_URL = '/media/'

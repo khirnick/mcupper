@@ -18,3 +18,13 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+
+class Task(models.Model):
+    title = models.CharField(max_length=50)
+    description = models.CharField(max_length=1000)
+    image = models.ImageField(upload_to='tasks')
+    correct_answer = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.title
