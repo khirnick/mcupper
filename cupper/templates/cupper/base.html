@@ -25,7 +25,7 @@
         <ul class="right hide-on-med-and-down">
             {% if user.is_authenticated %}
                 <li><a class="" href="#">Профиль</a></li>
-                <li><a class="" href="/logout">| Выйти</a></li>
+                <li><a class="" href="{% url 'cupper:logout' %}">| Выйти</a></li>
             {% else %}
                 <li><a class="" href="{% url 'cupper:login' %}">Войти</a></li>
             {% endif %}

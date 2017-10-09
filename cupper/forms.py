@@ -57,4 +57,17 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}), label='Пароль',
                                help_text='Пароль должен содержать минимум 4 символа')
 
+    def clean_username(self):
+        try:
+            user = User.objects.get(username=self.cleaned_data['username'])
+        except User.DoesNotExist:
+            raise forms.ValidationError('Пользователь с таким именем не существует',
+                                        code='user_doesnt_exist')
+
+        if not user.is_active:
+            raise forms.ValidationError('Пользователь не активирован',
+                                        code='user_not_active')
+
+        return self.cleaned_data['username']
+
 

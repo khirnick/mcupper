@@ -5,8 +5,8 @@ from cupper import views
 app_name = 'cupper'
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'login/$', views.login, name='login'),
-    url(r'logout/$', views.logout1, name='logout'),
+    url(r'login/$', views.do_login, name='login'),
+    url(r'logout/$', views.logout, name='logout'),
     url(r'logged_out/$', views.logged_out, name='logged_out'),
     url(r'signup/$', views.signup, name='signup'),
     url(r'signup_success/$', views.signup_success, name='signup_success'),

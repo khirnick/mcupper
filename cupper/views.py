@@ -17,6 +17,7 @@ from cupper.token_registration import token_registration
 def signup(request):
     if request.method == "POST":
         form = SignupForm(request.POST)
+
         if form.is_valid():
             user = form.save()
             user.is_active = False
@@ -76,7 +77,7 @@ def index(request):
     return render(request, 'cupper/index.html')
 
 
-def login(request):
+def do_login(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
 
@@ -86,26 +87,23 @@ def login(request):
 
             user = authenticate(username=username, password=password)
 
-            if user is not None:
-                if user.is_active:
-                    auth.login(request, user)
-                    print('is LOGIN!!!')
-                else:
-                    pass
-            else:
-                pass
+            print('asssssssssssssssssssssssssssssssssssssssssssssssssssssd')
+
+            auth.login(request, user)
+            return HttpResponseRedirect('/')
         else:
             pass
     else:
         form = LoginForm()
 
+    print(form.errors)
     return render(request, 'cupper/login.html', {'form': form})
 
 
-def logout1(request):
+def logout(request):
     print('11111111111111111111')
     auth.logout(request)
-    return render(request, 'cupper/logged_out.html')
+    return HttpResponseRedirect('/')
 
 
 def logged_out(request):
