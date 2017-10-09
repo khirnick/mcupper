@@ -47,3 +47,14 @@ class SignupForm(forms.Form):
         user.save()
 
         return user
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=30, label='Логин',
+                               help_text='Логин должен состоять не более чем из 30 сиволов',
+                               widget=forms.TextInput(attrs={'placeholder': 'Логин'}))
+
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}), label='Пароль',
+                               help_text='Пароль должен содержать минимум 4 символа')
+
+

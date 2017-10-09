@@ -1,3 +1,4 @@
+from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -7,8 +8,9 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth import authenticate, login
 
-from cupper.forms import SignupForm
+from cupper.forms import SignupForm, LoginForm
 from cupper.token_registration import token_registration
 
 
@@ -68,3 +70,43 @@ def activate(request, uidb64, token):
 
 def activation_success(request):
     return render(request, 'cupper/activation_success.html')
+
+
+def index(request):
+    return render(request, 'cupper/index.html')
+
+
+def login(request):
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+
+            user = authenticate(username=username, password=password)
+
+            if user is not None:
+                if user.is_active:
+                    auth.login(request, user)
+                    print('is LOGIN!!!')
+                else:
+                    pass
+            else:
+                pass
+        else:
+            pass
+    else:
+        form = LoginForm()
+
+    return render(request, 'cupper/login.html', {'form': form})
+
+
+def logout1(request):
+    print('11111111111111111111')
+    auth.logout(request)
+    return render(request, 'cupper/logged_out.html')
+
+
+def logged_out(request):
+    return render(request, 'cupper/logged_out.html')
