@@ -23,8 +23,6 @@ def signup(request):
             user.is_active = False
             user.save()
 
-            print(user.pk)
-
             our_site = get_current_site(request)
             activation_token = token_registration.make_token(user)
 
@@ -87,9 +85,8 @@ def do_login(request):
 
             user = authenticate(username=username, password=password)
 
-            print('asssssssssssssssssssssssssssssssssssssssssssssssssssssd')
-
             auth.login(request, user)
+
             return HttpResponseRedirect('/')
         else:
             pass
