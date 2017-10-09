@@ -9,8 +9,10 @@ from django.urls import reverse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth import authenticate, login
+from django.views.generic import DetailView
 
 from cupper.forms import SignupForm, LoginForm
+from cupper.models import Profile
 from cupper.token_registration import token_registration
 
 
@@ -104,3 +106,7 @@ def logout(request):
 
 def logged_out(request):
     return render(request, 'cupper/logged_out.html')
+
+
+def profile(request):
+    return render(request, 'cupper/profile.html')

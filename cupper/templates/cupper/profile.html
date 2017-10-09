@@ -1,0 +1,14 @@
+{% extends 'cupper/base.html' %}
+{% block content %}
+
+<div class="container white-text" style="text-align: center">
+    <h1 class="white-text">Профиль</h1><br/>
+{% if user.is_authenticated %}
+    <p>Имя пользователя: {{ user.username }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>Очки: {{ user.profile.score }}</p>
+{% else %}
+    <p>Вы не авторизованы</p>
+{% endif %}
+</div>
+{% endblock %}

@@ -16,7 +16,7 @@
  <nav>
 
     <div class="nav-wrapper teal darken-4">
-      <a href="#" class="brand-logo center">mcupper</a>
+      <a href="{% url 'cupper:index' %}" class="brand-logo center">mcupper</a>
       <ul id="nav-mobile" class="left hide-on-med-and-down">
         <li><a href="#">Новости</a></li>
         <li><a href="#">Таблица рекордов</a></li>
@@ -24,7 +24,7 @@
 
         <ul class="right hide-on-med-and-down">
             {% if user.is_authenticated %}
-                <li><a class="" href="#">Профиль</a></li>
+                <li><a class="" href="{% url 'cupper:profile' %}">Профиль</a></li>
                 <li><a class="" href="{% url 'cupper:logout' %}">Выйти</a></li>
             {% else %}
                 <li><a class="" href="{% url 'cupper:login' %}">Войти</a></li>
