@@ -101,7 +101,6 @@ def do_login(request):
 
 
 def logout(request):
-    print('11111111111111111111')
     auth.logout(request)
     return HttpResponseRedirect('/')
 
