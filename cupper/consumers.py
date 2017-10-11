@@ -17,7 +17,19 @@ def ws_receive(message):
 
 
 def ws_disconnect(message):
-    pass
+    print('qweqwe')
+    for room in GameMain.rooms:
+        for u in room.user_channels:
+            if room.user_channels[u] == message.reply_channel:
+                del room.user_channels[u]
+                print()
+
+    all_users = ''
+    for room in GameMain.rooms:
+        for u in room.user_channels:
+            all_users += ("{0}\n".format(u))
+            room.user_channels[u].send({'text': json.dumps({'user_id': all_users})})
+            all_users = ''
 
 
 def room_join(message):
