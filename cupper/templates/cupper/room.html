@@ -15,6 +15,7 @@
 </div>
 
     <button id="go">Присоединиться</button>
+    <button id="leave">Покинуть</button>
 
 {% endblock %}
 
@@ -30,6 +31,9 @@
 
             ws.onmessage = function (msg) {
                 var data = JSON.parse(msg.data)
+                if (data.user_leave){
+                    document.getElementById("u1").innerHTML = ""
+                }
                 if (data.user_id) {
                     document.getElementById("u1").innerHTML = "Состав комнаты: " + data.user_id;
                 }
@@ -42,6 +46,20 @@
                     "user_id": user_id,
 
                 }));
+
+                //document.getElementById('go').id = 'leave';
+                //document.getElementById('leave').innerHTML = 'leave';
+            })
+
+            $('#leave').click(function (e) {
+                ws.send(JSON.stringify({
+                    "command": "leave",
+                    "room": room_id,
+                    "user_id": user_id,
+                }))
+
+                //document.getElementById('leave').id = 'go';
+                //document.getElementById('go').innerHTML = 'go';
             })
         });
 

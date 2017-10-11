@@ -7,7 +7,6 @@ from cupper.room import GameMain
 
 def ws_connect(message):
     message.reply_channel.send({'accept': True})
-    Group('cupper').add(message.reply_channel)
 
 
 def ws_receive(message):
@@ -33,7 +32,28 @@ def room_join(message):
         for u in room.user_channels:
             all_users += ("{0}\n".format(u))
 
-        print(all_users)
-
         for u in room.user_channels:
             room.user_channels[u].send({'text': json.dumps({'user_id': all_users})})
+
+
+def room_leave(message):
+    user_id = message.content['user_id']
+    room_id = int(message.content['room'])
+    room = GameMain.get_room_by_id(room_id)
+
+    ch = room.user_channels[int(user_id)]
+
+    ch.send({'text': json.dumps({'user_leave': True})})
+
+    del room.user_channels[int(user_id)]
+
+    all_users = ''
+    for u in room.user_channels:
+        if room.user_channels[u] is not None:
+            all_users += ("{0}\n".format(u))
+
+    for u in room.user_channels:
+        if room.user_channels[u] is not None:
+            room.user_channels[u].send({'text': json.dumps({'user_id': all_users})})
+
+
