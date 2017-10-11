@@ -3,14 +3,11 @@
 {% block content %}
 
 <div>
-    <p>Вы находитесь в комнате</p><div id="room">{{ room.id }}</div>
-    <p>С вами в комнате:</p><br>
-    <div id="users">
-
-    </div>
+    <div>Вы находитесь в комнате #<p style="display: inline" id="room">{{ room.id }}</p></div>
+    <p id="u1"></p>
 </div>
 
-    <button id="go">Начать</button>
+    <button id="go">Присоединиться</button>
 
 {% endblock %}
 
@@ -23,27 +20,23 @@
             var room_id = document.getElementById("room").innerHTML;
 
             var user_id = "{{ user.id }}";
-            //alert(username);
 
             ws.onmessage = function (msg) {
-                alert('!!!!!')
-                if (msg.join) {
-                    alert('!!!!!!!')
-                    console.log("somebody join")
+                var data = JSON.parse(msg.data)
+                if (data.user_id) {
+                    document.getElementById("u1").innerHTML = "Состав комнаты: " + data.user_id;
                 }
             }
 
-
-
             $('#go').click(function (e) {
-                alert($("#room").val('').focus());
                 ws.send(JSON.stringify({
-                            "command": "join",
-                            "room": room_id,
-                            "user_id": user_id,
+                    "command": "join",
+                    "room": room_id,
+                    "user_id": user_id,
 
-                    }));
+                }));
             })
-        })
+        });
+
     </script>
 {% endblock %}
