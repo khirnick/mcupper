@@ -26,11 +26,8 @@ def room_join(message):
     room_id = int(message.content['room'])
     room = GameMain.get_room_by_id(room_id)
 
-    print(room.user_channels)
-
-    user_channel = room.user_channels.get(user_id)
-    if user_channel is None:
-        room.user_channels[user_id] = message.reply_channel
+    user_channel = room.add_user_channel(user_id, message.reply_channel)
+    if user_channel:
 
         all_users = ''
         for u in room.user_channels:

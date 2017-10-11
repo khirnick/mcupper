@@ -4,7 +4,14 @@
 
 <div>
     <div>Вы находитесь в комнате #<p style="display: inline" id="room">{{ room.id }}</p></div>
-    <p id="u1"></p>
+    <p id="u1">
+        {% if user.id in room.user_channels %}
+            Состав комнаты:
+            {% for key, value in room.user_channels.items %}
+                {{ key }}
+            {% endfor %}
+        {% endif %}
+    </p>
 </div>
 
     <button id="go">Присоединиться</button>

@@ -25,6 +25,16 @@ class Room:
         if len(self.user_channels) == 5:
             return False
 
+    def add_user_channel(self, user_id, user_channel):
+        if len(self.user_channels) >= 5:
+            return False
+
+        user = self.user_channels.get(user_id)
+        if user is None:
+            self.user_channels[int(user_id)] = user_channel
+
+        return True
+
 
 GameMain = Game()
 GameMain.add_room()
