@@ -1,0 +1,49 @@
+{% extends 'cupper/base.html' %}
+
+{% block content %}
+
+<div>
+    <p>Вы находитесь в комнате</p><div id="room">{{ room.id }}</div>
+    <p>С вами в комнате:</p><br>
+    <div id="users">
+
+    </div>
+</div>
+
+    <button id="go">Начать</button>
+
+{% endblock %}
+
+{% block script_block %}
+    <script>
+        $(document).ready(function () {
+            var ws_path = "/cupper/stream";
+            var ws = new WebSocket("ws://" + window.location.host + ws_path);
+
+            var room_id = document.getElementById("room").innerHTML;
+
+            var user_id = "{{ user.id }}";
+            //alert(username);
+
+            ws.onmessage = function (msg) {
+                alert('!!!!!')
+                if (msg.join) {
+                    alert('!!!!!!!')
+                    console.log("somebody join")
+                }
+            }
+
+
+
+            $('#go').click(function (e) {
+                alert($("#room").val('').focus());
+                ws.send(JSON.stringify({
+                            "command": "join",
+                            "room": room_id,
+                            "user_id": user_id,
+
+                    }));
+            })
+        })
+    </script>
+{% endblock %}

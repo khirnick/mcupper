@@ -1,6 +1,25 @@
 {% extends 'cupper/base.html' %}
 {% block content %}
 
-    <p>INDEX</p>
+    <div class="container white-text " style="text-align: center; margin-top: 20%">
+        <input class="btn btn-large" type="button" value="Начать игру" />
+    </div>
+
+{% endblock %}
+
+{% block script_block %}
+
+        <script>
+        $(document).ready(function () {
+            alert('111111111111111111111111111111111')
+            var ws_path = '/cupper/stream';
+            var ws = new WebSocket('ws://' + window.location.host + ws_path);
+
+            ws.onopen = function (event) {
+                alert('socket opened')
+            }
+
+        })
+        </script>
 
 {% endblock %}
