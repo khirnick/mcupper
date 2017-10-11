@@ -17,19 +17,29 @@ def ws_receive(message):
 
 
 def ws_disconnect(message):
-    print('qweqwe')
+    print(message.reply_channel)
+
+    key_to_delete = []
+
     for room in GameMain.rooms:
         for u in room.user_channels:
-            if room.user_channels[u] == message.reply_channel:
-                del room.user_channels[u]
-                print()
+            print(room.user_channels[u])
+            if str(message.reply_channel) == str(room.user_channels[u]):
+                key_to_delete = u
+                break
+        room.user_channels.pop(key_to_delete, None)
+
+    for room in GameMain.rooms:
+        for u in room.user_channels:
+            print(u)
 
     all_users = ''
     for room in GameMain.rooms:
         for u in room.user_channels:
             all_users += ("{0}\n".format(u))
+        for u in room.user_channels:
             room.user_channels[u].send({'text': json.dumps({'user_id': all_users})})
-            all_users = ''
+        all_users = ''
 
 
 def room_join(message):
@@ -42,6 +52,7 @@ def room_join(message):
 
         all_users = ''
         for u in room.user_channels:
+            #print(u)
             all_users += ("{0}\n".format(u))
 
         for u in room.user_channels:
@@ -53,11 +64,10 @@ def room_leave(message):
     room_id = int(message.content['room'])
     room = GameMain.get_room_by_id(room_id)
 
-    ch = room.user_channels[int(user_id)]
-
-    ch.send({'text': json.dumps({'user_leave': True})})
-
-    del room.user_channels[int(user_id)]
+    if room.user_channels.get(int(user_id)) is not None:
+        ch = room.user_channels[int(user_id)]
+        ch.send({'text': json.dumps({'user_leave': True})})
+        del room.user_channels[int(user_id)]
 
     all_users = ''
     for u in room.user_channels:

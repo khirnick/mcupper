@@ -30,6 +30,7 @@ class Room:
             return False
 
         user = self.user_channels.get(user_id)
+
         if user is None:
             self.user_channels[int(user_id)] = user_channel
 
