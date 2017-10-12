@@ -18,7 +18,7 @@ def ws_receive(message):
 
 
 def ws_disconnect(message):
-    GameMain.try_to_delete_user_from_rooms(message.reply_channel)
+    GameMain.delete_disconnected_user_from_rooms(message.reply_channel)
     GameMain.update_user_group()
 
 
@@ -33,23 +33,18 @@ def room_join(message):
     if not room.game_is_online:
         if room.is_busy:
             room.start_game()
-            room.continue_game_with_next_question()
 
 
 def room_leave(message):
-    user_id = message.content['user_id']
+    user_id = int(message.content['user_id'])
     room_id = int(message.content['room'])
     room = GameMain.get_room_by_id(room_id)
 
-    if room.user_channels.get(int(user_id)) is not None:
-        ch = room.user_channels[int(user_id)]
-        ch.send({'text': json.dumps({'user_leave': True})})
-        del room.user_channels[int(user_id)]
-
+    room.delete_left_user_by_user_id(user_id)
     room.update_user_group()
 
 
-def result(message):
+def room_answer(message):
     answer = message.content['answer']
     room_id = int(message.content['room'])
     room = GameMain.get_room_by_id(room_id)

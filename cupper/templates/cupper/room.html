@@ -51,7 +51,7 @@
                     $('#go_result').click( function (e) {
                         var res = document.getElementById("res").value;
                         ws.send(JSON.stringify({
-                            "command": "result",
+                            "command": "answer",
                             "room": room_id,
                             "user_id": user_id,
                             "answer": res,
@@ -62,14 +62,13 @@
                 if(data.ifwinner) {
                     if (data.ifwinner === true) {
                         document.getElementById("if-winner").innerHTML = "YOU WIN!!!!!!!!!!!"
-                    }
-                    else {
-                        alert("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-
+                        document.getElementById("u1").innerHTML = document.getElementById("game").innerHTML = ""
                     }
                 }
                 if(data.ifloser) {
                     document.getElementById("if-winner").innerHTML = "YOU LOSE!!!!!!!!!!!"
+                    document.getElementById("u1").innerHTML = document.getElementById("game").innerHTML = ""
+
                 }
             }
 
@@ -81,6 +80,7 @@
 
                 }));
 
+                document.getElementById("if-winner").innerHTML = ""
 
                 //document.getElementById('go').id = 'leave';
                 //document.getElementById('leave').innerHTML = 'leave';

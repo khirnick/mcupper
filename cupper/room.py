@@ -19,9 +19,9 @@ class Game:
     def get_room_by_id(self, id):
         return self.rooms[id]
 
-    def try_to_delete_user_from_rooms(self, channel):
+    def delete_disconnected_user_from_rooms(self, channel):
         for room in self.rooms:
-            room.try_to_delete_disconnected_user_from_room(channel)
+            room.delete_disconnected_user_from_room(channel)
 
     def update_user_group(self):
         for room in self.rooms:
@@ -84,8 +84,11 @@ class Room:
         self.user_scores.clear()
         self.current_task_no = 0
 
-    def try_to_delete_disconnected_user_from_room(self, channel):
-        key_to_delete = None
+    def delete_left_user_by_user_id(self, user_id):
+        self.send_to_user_over_websocket_by_id(user_id, {'user_leave': True})
+        self.user_channels.pop(user_id, None)
+
+    def delete_disconnected_user_from_room(self, channel):
         for user_id, user_channel in self.user_channels.items():
             if str(channel) == str(user_channel):
                 self.user_channels.pop(user_id, None)
@@ -98,29 +101,39 @@ class Room:
 
         self.send_to_all_users_over_websocket({'user_id': user_group})
 
-    def start_game(self):
+    def create_user_scores_dict(self):
         for user_id, channel in self.user_channels.items():
             self.user_scores[user_id] = 0
 
-        self.game_is_online = True
+    def start_game(self):
+        if not self.game_is_online and self.is_busy:
+            self.create_user_scores_dict()
+            self.game_is_online = True
+
+            self.continue_game_with_next_question()
 
     def continue_game_with_next_question(self):
+        if not self.game_is_online:
+            return
+
         if self.current_task_no == self.task_limit:
-            user_id_winner = self.get_user_id_of_winner()
-            self.send_to_user_over_websocket_by_id(user_id_winner, {'ifwinner': True})
-            for user_id, channel in self.user_channels.items():
-                if user_id != user_id_winner:
-                    print(user_id)
-                    self.send_to_user_over_websocket_by_id(user_id, {'ifloser': True})
+            self.send_complete_info_about_game()
             self.reset_room()
         else:
             task = self.update_current_task()
             self.send_to_all_users_over_websocket({'game_start': True, 'image': str(task.image)})
             self.current_task_no += 1
 
+    def send_complete_info_about_game(self):
+        user_id_winner = self.get_user_id_of_winner()
+        self.send_to_user_over_websocket_by_id(user_id_winner, {'ifwinner': True})
 
+        for user_id, channel in self.user_channels.items():
+            if user_id != user_id_winner:
+                self.send_to_user_over_websocket_by_id(user_id, {'ifloser': True})
 
 
 GameMain = Game()
 GameMain.add_room()
 GameMain.add_room()
+
