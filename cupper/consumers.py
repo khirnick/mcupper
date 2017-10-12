@@ -51,22 +51,21 @@ def room_join(message):
         return
 
     user_channel = room.add_user_channel(user_id, message.reply_channel)
-    if user_channel:
 
+    if user_channel:
         all_users = ''
         for u in room.user_channels:
             all_users += ("{0}\n".format(u))
 
-        for u in room.user_channels:
-            room.user_channels[u].send({'text': json.dumps({'user_id': all_users})})
+        room.send_to_all_users_over_websocket({'user_id': all_users})
 
     if not room.game_is_online:
         if len(room.user_channels) == room.max_channels:
             room.game_online = True
-            task = room.make_current_task()
-            room.task_no += 1
+            task = room.update_current_task()
+            room.current_task_no += 1
             for u in room.user_channels:
-                room.user_score[u] = 0
+                room.user_scores[u] = 0
             for u in room.user_channels:
                 room.user_channels[u].send({'text': json.dumps({'game_start': True, 'image': str(task.image)})})
 
@@ -97,26 +96,12 @@ def result(message):
     room = GameMain.get_room_by_id(room_id)
     user_id = int(message.content['user_id'])
 
-    if answer == room.current_task.correct_answer:
-        room.user_score[user_id] += 1
+    room.check_answer(user_id, answer)
+
+    if room.current_task_no == room.task_limit:
+        user_id_winner = room.get_max_score()
+        room.send_to_user_over_websocket_by_id(user_id_winner, {'ifwinner': True})
+        room.reset_room()
     else:
-        room.user_score[user_id] += 1
-
-    room.current_task_no += 1
-
-    if room.task_no == room.task_limit:
-        max_score = max(room.user_score, key=room.user_score.get)
-        room.user_channels[max_score].send({'text': json.dumps({'ifwinner': True})})
-
-        for u in room.user_channels:
-            if u != max_score:
-                room.user_channels[u].send({'text':json.dumps({'ifwinner': False})})
-
-        room.current_task_no = 0
-        room.game_is_online = False
-    else:
-        task = room.make_current_task()
-        for u in room.user_channels:
-            room.user_channels[u].send({'text': json.dumps({'game_start': True, 'image': str(task.image)})})
-
-
+        task = room.update_current_task()
+        room.send_to_all_users_over_websocket({'game_start': True, 'image': str(task.image)})
