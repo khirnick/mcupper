@@ -46,21 +46,18 @@
                     document.getElementById("game").innerHTML = "<img src='" + '/media/' + img_src + "'/>"
                     document.getElementById("game").innerHTML += "<textarea id='res'/>"
                     document.getElementById("game").innerHTML += "<button id='go_result'>Ответить</button>"
-                                $('#go_result').click( function (e) {
-                var res = document.getElementById("res").value;
-                alert("1212")
-                ws.send(JSON.stringify({
-                    "command": "result",
-                    "room": room_id,
-                    "user_id": user_id,
-                    "answer": res,
+                    $('#go_result').click( function (e) {
+                        var res = document.getElementById("res").value;
+                        ws.send(JSON.stringify({
+                            "command": "result",
+                            "room": room_id,
+                            "user_id": user_id,
+                            "answer": res,
 
-                }));
-            });
+                        }));
+                    });
                 }
             }
-
-
 
             $('#go').click(function (e) {
                 ws.send(JSON.stringify({

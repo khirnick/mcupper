@@ -85,6 +85,9 @@ def room_leave(message):
 
 
 def result(message):
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-    print(message.content['answer'])
+    answer = message.content['answer']
+    room_id = int(message.content['room'])
+    room = GameMain.get_room_by_id(room_id)
+
+    print(answer, " ", room.current_task.correct_answer)
 
