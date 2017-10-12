@@ -14,6 +14,8 @@
     </p>
 </div>
 
+    <p id="if-winner"></p>
+
     <button id="go">Присоединиться</button>
     <button id="leave">Покинуть</button>
 
@@ -43,7 +45,7 @@
                 }
                 if (data.game_start) {
                     var img_src = data.image;
-                    document.getElementById("game").innerHTML = "<img src='" + '/media/' + img_src + "'/>"
+                    document.getElementById("game").innerHTML = "<img width='30%' src='" + '/media/' + img_src + "'/>"
                     document.getElementById("game").innerHTML += "<textarea id='res'/>"
                     document.getElementById("game").innerHTML += "<button id='go_result'>Ответить</button>"
                     $('#go_result').click( function (e) {
@@ -56,6 +58,14 @@
 
                         }));
                     });
+                }
+                if(data.ifwinner) {
+                    if (data.ifwinner == true) {
+                        document.getElementById("if-winner").innerHTML = "YOU WIN!!!!!!!!!!!"
+                    }
+                    else {
+                        document.getElementById("if-winner").innerHTML = "YOU LOSE!!!!!!!!!!!"
+                    }
                 }
             }
 

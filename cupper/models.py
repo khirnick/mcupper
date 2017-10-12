@@ -28,3 +28,14 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
+
+    @staticmethod
+    def get_random_task():
+        tasks = Task.objects.all()
+        first_index = tasks.first().pk
+        last_index = tasks.last().pk
+
+        from random import randint
+        random_index = randint(first_index, last_index)
+
+        return tasks.get(pk=random_index)

@@ -47,21 +47,28 @@ def room_join(message):
     room_id = int(message.content['room'])
     room = GameMain.get_room_by_id(room_id)
 
+    if len(room.user_channels) == room.max_channels:
+        return
+
     user_channel = room.add_user_channel(user_id, message.reply_channel)
     if user_channel:
 
         all_users = ''
         for u in room.user_channels:
-            #print(u)
             all_users += ("{0}\n".format(u))
 
         for u in room.user_channels:
             room.user_channels[u].send({'text': json.dumps({'user_id': all_users})})
 
-    if len(room.user_channels) == room.max_channels:
-        task = room.make_current_task()
-        for u in room.user_channels:
-            room.user_channels[u].send({'text': json.dumps({'game_start': True, 'image': str(task.image)})})
+    if not room.game_is_online:
+        if len(room.user_channels) == room.max_channels:
+            room.game_online = True
+            task = room.make_current_task()
+            room.task_no += 1
+            for u in room.user_channels:
+                room.user_score[u] = 0
+            for u in room.user_channels:
+                room.user_channels[u].send({'text': json.dumps({'game_start': True, 'image': str(task.image)})})
 
 
 def room_leave(message):
@@ -88,6 +95,28 @@ def result(message):
     answer = message.content['answer']
     room_id = int(message.content['room'])
     room = GameMain.get_room_by_id(room_id)
+    user_id = int(message.content['user_id'])
 
-    print(answer, " ", room.current_task.correct_answer)
+    if answer == room.current_task.correct_answer:
+        room.user_score[user_id] += 1
+    else:
+        room.user_score[user_id] += 1
+
+    room.current_task_no += 1
+
+    if room.task_no == room.task_limit:
+        max_score = max(room.user_score, key=room.user_score.get)
+        room.user_channels[max_score].send({'text': json.dumps({'ifwinner': True})})
+
+        for u in room.user_channels:
+            if u != max_score:
+                room.user_channels[u].send({'text':json.dumps({'ifwinner': False})})
+
+        room.current_task_no = 0
+        room.game_is_online = False
+    else:
+        task = room.make_current_task()
+        for u in room.user_channels:
+            room.user_channels[u].send({'text': json.dumps({'game_start': True, 'image': str(task.image)})})
+
 

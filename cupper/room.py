@@ -20,23 +20,25 @@ class Game:
 
 class Room:
     def __init__(self, id):
+        self.current_task_no = 0
+        self.task_limit = 5
+        self.game_is_online = False
         self.max_channels = 2
         self.user_channels = {}
+        self.user_score = {}
         self.id = id
         self.current_task = None
 
     def make_current_task(self):
-        task = Task.objects.get(pk=4)
-        self.current_task = task
-        print(self.current_task.image)
+        self.current_task = Task.get_random_task()
         return self.current_task
 
     def is_busy(self):
-        if len(self.user_channels) == 5:
+        if len(self.user_channels) == self.max_channels:
             return False
 
     def add_user_channel(self, user_id, user_channel):
-        if len(self.user_channels) >= 5:
+        if len(self.user_channels) >= self.max_channels:
             return False
 
         user = self.user_channels.get(user_id)
