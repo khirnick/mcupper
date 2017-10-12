@@ -60,12 +60,16 @@
                     });
                 }
                 if(data.ifwinner) {
-                    if (data.ifwinner == true) {
+                    if (data.ifwinner === true) {
                         document.getElementById("if-winner").innerHTML = "YOU WIN!!!!!!!!!!!"
                     }
                     else {
-                        document.getElementById("if-winner").innerHTML = "YOU LOSE!!!!!!!!!!!"
+                        alert("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
                     }
+                }
+                if(data.ifloser) {
+                    document.getElementById("if-winner").innerHTML = "YOU LOSE!!!!!!!!!!!"
                 }
             }
 
