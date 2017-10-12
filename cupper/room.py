@@ -1,3 +1,6 @@
+from cupper.models import Task
+
+
 class Game:
     def __init__(self):
         self.rooms = []
@@ -17,9 +20,16 @@ class Game:
 
 class Room:
     def __init__(self, id):
-        self.max_channels = 5
+        self.max_channels = 2
         self.user_channels = {}
         self.id = id
+        self.current_task = None
+
+    def make_current_task(self):
+        task = Task.objects.get(pk=4)
+        self.current_task = task
+        print(self.current_task.image)
+        return self.current_task
 
     def is_busy(self):
         if len(self.user_channels) == 5:

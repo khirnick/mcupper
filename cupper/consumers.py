@@ -58,6 +58,11 @@ def room_join(message):
         for u in room.user_channels:
             room.user_channels[u].send({'text': json.dumps({'user_id': all_users})})
 
+    if len(room.user_channels) == room.max_channels:
+        task = room.make_current_task()
+        for u in room.user_channels:
+            room.user_channels[u].send({'text': json.dumps({'game_start': True, 'image': str(task.image)})})
+
 
 def room_leave(message):
     user_id = message.content['user_id']
@@ -78,4 +83,8 @@ def room_leave(message):
         if room.user_channels[u] is not None:
             room.user_channels[u].send({'text': json.dumps({'user_id': all_users})})
 
+
+def result(message):
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    print(message.content['answer'])
 
