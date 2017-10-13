@@ -2,28 +2,28 @@
 
 {% block content %}
 
-<div>
-    <div>Вы находитесь в комнате #<p style="display: inline" id="room">{{ room.id }}</p></div>
-    <p id="u1">
+<div class="container white-text" style="text-align: center; margin-top: 15%">
+    <h4>Вы находитесь в комнате <p style="display: inline" id="room">{{ room.id }}</p></h4>
+    <h5 id="u1">
         {% if user.id in room.user_channels %}
             Состав комнаты:
             {% for key, value in room.user_channels.items %}
                 {{ key }}
             {% endfor %}
         {% endif %}
-    </p>
-</div>
+    </h5>
 
     <p id="if-winner"></p>
 
-    <button id="go">Присоединиться</button>
-    <button id="leave">Покинуть</button>
+    <button class="btn btn-large" id="go">Присоединиться</button>
+    <button class="btn btn-large" id="leave">Покинуть</button>
 
     <div id="link_to_final"></div>
 
     <div id="game">
 
     </div>
+</div>
 
 {% endblock %}
 
@@ -51,7 +51,7 @@
                     var img_src = data.image;
                     document.getElementById("game").innerHTML = "<img width='30%' src='" + '/media/' + img_src + "'/>"
                     document.getElementById("game").innerHTML += "<textarea id='res'/>"
-                    document.getElementById("game").innerHTML += "<button id='go_result'>Ответить</button>"
+                    document.getElementById("game").innerHTML += "<button class='btn' id='go_result'>Ответить</button>"
                     $('#go_result').click( function (e) {
                         var res = document.getElementById("res").value;
                         ws.send(JSON.stringify({
@@ -66,12 +66,12 @@
                 }
                 if(data.ifwinner) {
                     if (data.ifwinner === true) {
-                        document.getElementById("if-winner").innerHTML = "YOU WIN!!!!!!!!!!!"
+                        document.getElementById("if-winner").innerHTML = "Вы выиграли"
                         document.getElementById("u1").innerHTML = document.getElementById("game").innerHTML = ""
                     }
                 }
                 if(data.ifloser) {
-                    document.getElementById("if-winner").innerHTML = "YOU LOSE!!!!!!!!!!!"
+                    document.getElementById("if-winner").innerHTML = "Вы проиграли"
                     document.getElementById("u1").innerHTML = document.getElementById("game").innerHTML = ""
 
                 }

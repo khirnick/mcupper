@@ -1,5 +1,7 @@
 import json
 
+from django.contrib.auth.models import User
+
 from cupper.models import Task
 
 
@@ -74,6 +76,7 @@ class Room:
             return False
 
         if self.private_room:
+            print(user_id)
             if user_id not in self.user_channels:
                 return False
 
@@ -99,7 +102,6 @@ class Room:
 
     def check_answer(self, user_id_answered, answer):
         if answer == self.current_task.correct_answer:
-            print(self.user_scores)
             self.user_scores[user_id_answered] += 1
         else:
             self.user_scores[user_id_answered] += 1
@@ -153,8 +155,7 @@ class Room:
     def send_complete_info_about_game(self):
         user_id_winner = self.get_user_id_of_winner()
 
-        if self.type == 'default':
-            print(self.type)
+        if self.type == Room.DEFAULT_NAME:
             final_room = FinalGameMain.is_free_rooms()
             final_room.add_user_id_to_potential_member(user_id_winner)
             final_room_id = final_room.id
@@ -163,6 +164,10 @@ class Room:
             self.send_to_user_over_websocket_by_id(user_id_winner, {'ifwinner': True,
                                                                     'link_to_final_room': url_to_final_room})
         else:
+            user_winner = User.objects.get(pk=user_id_winner)
+            user_winner.profile.score += 1
+            user_winner.save()
+
             self.send_to_user_over_websocket_by_id(user_id_winner, {'ifwinner': True})
 
         for user_id, channel in self.user_channels.items():

@@ -96,7 +96,6 @@ def do_login(request):
     else:
         form = LoginForm()
 
-    print(form.errors)
     return render(request, 'cupper/login.html', {'form': form})
 
 

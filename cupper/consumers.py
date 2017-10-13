@@ -18,10 +18,11 @@ def ws_receive(message):
 
 
 def ws_disconnect(message):
-    FinalGameMain.delete_disconnected_user_from_rooms(message.reply_channel)
-    FinalGameMain.update_user_group()
-    GameMain.delete_disconnected_user_from_rooms(message.reply_channel)
-    GameMain.update_user_group()
+    #FinalGameMain.delete_disconnected_user_from_rooms(message.reply_channel)
+    #FinalGameMain.update_user_group()
+    #GameMain.delete_disconnected_user_from_rooms(message.reply_channel)
+    #GameMain.update_user_group()
+    pass
 
 
 def room_join(message):

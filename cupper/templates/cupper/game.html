@@ -1,7 +1,9 @@
 {% extends 'cupper/base.html' %}
 
 {% block content %}
-        <a href="{% url 'cupper:room' room.id %}">Комната {{ room.id }}</a><br/>
+    <div class="container white-text" style="text-align: center">
+        <a class="btn" href="{% url 'cupper:room' room.id %}">Комната {{ room.id }}</a><br/>
+    </div>
 {% endblock %}
 
 {% block script_block %}
