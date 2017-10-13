@@ -7,8 +7,8 @@ class Game:
     def __init__(self):
         self.rooms = []
 
-    def add_room(self, type='default'):
-        new_room = self.rooms.append(Room(len(self.rooms), type))
+    def add_room(self, type_room=Room.DEFAULT_NAME):
+        new_room = self.rooms.append(Room(id_room=len(self.rooms), type_room=type_room))
         return new_room
 
     def is_free_rooms(self):
@@ -29,20 +29,26 @@ class Game:
 
 
 class Room:
-    def __init__(self, id, type):
+    FINAL_NAME = 'final'
+    DEFAULT_NAME = 'default'
+    DEFAULT_TASK_LIMIT = 5
+    DEFAULT_MAX_CHANNELS = 2
+
+    def __init__(self, id_room, type_room,
+                 task_limit=DEFAULT_TASK_LIMIT,
+                 max_channels=DEFAULT_MAX_CHANNELS):
         self.current_task_no = 0
-        self.task_limit = 5
+        self.task_limit = task_limit
         self.game_is_online = False
-        self.max_channels = 2
+        self.max_channels = max_channels
         self.user_channels = {}
         self.user_scores = {}
-        self.id = id
+        self.id = id_room
         self.current_task = None
-        if type == "final":
-            self.private_room = True
-        else:
-            self.private_room = False
-        self.type = type
+        self.type = type_room
+        self.private_room = False
+
+        self.make_room_private() if self.type == Room.FINAL_NAME else self.make_room_public()
 
     def make_room_private(self):
         self.private_room = True
@@ -168,5 +174,5 @@ GameMain.add_room()
 GameMain.add_room()
 
 FinalGameMain = Game()
-r1 = FinalGameMain.add_room('final')
-r2 = FinalGameMain.add_room('final')
+FinalGameMain.add_room('final')
+FinalGameMain.add_room('final')
