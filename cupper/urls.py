@@ -15,6 +15,7 @@ urlpatterns = [
         views.activate, name='activate'),
     url(r'activation_success/$', views.activation_success),
     url(r'game/', views.game, name='game'),
-    url(r'room/(?P<room_id>[0-9]+)/$', views.room, name='room')
+    url(r'final_room/(?P<room_id>[0-9]+)/$', views.final_room, name='final_room'),
+    url(r'room/(?P<room_id>[0-9]+)/$', views.room, name='room'),
 
 ]

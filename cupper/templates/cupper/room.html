@@ -19,6 +19,8 @@
     <button id="go">Присоединиться</button>
     <button id="leave">Покинуть</button>
 
+    <div id="link_to_final"></div>
+
     <div id="game">
 
     </div>
@@ -34,6 +36,8 @@
             var room_id = document.getElementById("room").innerHTML;
 
             var user_id = "{{ user.id }}";
+            var room_type = "{{ room.type }}"
+
 
             ws.onmessage = function (msg) {
                 var data = JSON.parse(msg.data)
@@ -55,6 +59,7 @@
                             "room": room_id,
                             "user_id": user_id,
                             "answer": res,
+                            "room_type": room_type
 
                         }));
                     });
@@ -70,6 +75,11 @@
                     document.getElementById("u1").innerHTML = document.getElementById("game").innerHTML = ""
 
                 }
+                if(data.link_to_final_room){
+                    var link = data.link_to_final_room;
+                    alert(link)
+                    document.getElementById("link_to_final").innerHTML = "<a href='" + link + ">GO</a>"
+                }
             }
 
             $('#go').click(function (e) {
@@ -77,6 +87,7 @@
                     "command": "join",
                     "room": room_id,
                     "user_id": user_id,
+                    "room_type": room_type
 
                 }));
 
@@ -91,6 +102,7 @@
                     "command": "leave",
                     "room": room_id,
                     "user_id": user_id,
+                    "room_type": room_type
                 }))
 
                 //document.getElementById('leave').id = 'go';
