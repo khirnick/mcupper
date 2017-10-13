@@ -4,11 +4,12 @@ from cupper.models import Task
 
 
 class Game:
-    def __init__(self):
+    def __init__(self, rooms_type):
         self.rooms = []
+        self.rooms_type = rooms_type
 
-    def add_room(self, type_room=Room.DEFAULT_NAME):
-        new_room = self.rooms.append(Room(id_room=len(self.rooms), type_room=type_room))
+    def add_room(self):
+        new_room = self.rooms.append(Room(id_room=len(self.rooms), type_room=self.rooms_type))
         return new_room
 
     def is_free_rooms(self):
@@ -169,10 +170,10 @@ class Room:
                 self.send_to_user_over_websocket_by_id(user_id, {'ifloser': True})
 
 
-GameMain = Game()
+GameMain = Game(Room.DEFAULT_NAME)
 GameMain.add_room()
 GameMain.add_room()
 
-FinalGameMain = Game()
-FinalGameMain.add_room('final')
-FinalGameMain.add_room('final')
+FinalGameMain = Game(Room.FINAL_NAME)
+FinalGameMain.add_room()
+FinalGameMain.add_room()
