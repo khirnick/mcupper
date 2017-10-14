@@ -101,11 +101,8 @@ class Room:
             return False
 
         if self.private_room:
-            print(GameManager.allowed_users_id_for_final)
             if user_id not in GameManager.allowed_users_id_for_final[self.id]:
                 return False
-
-        print('now Im in private final room: ', self.type)
 
         user = self.user_channels.get(user_id)
 
@@ -199,6 +196,8 @@ class Room:
             user_winner = User.objects.get(pk=user_id_winner)
             user_winner.profile.score += 1
             user_winner.save()
+
+            GameManager.allowed_users_id_for_final.clear()
 
             self.send_to_user_over_websocket_by_id(user_id_winner, {'ifwinner': True})
 
