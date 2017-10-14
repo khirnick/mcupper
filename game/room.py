@@ -3,6 +3,7 @@ import json
 from django.contrib.auth.models import User
 
 from game.models import Task
+from mcupper import settings
 
 
 class Room:
@@ -123,7 +124,7 @@ class Room:
             self.reset_room()
         else:
             task = self.update_current_task()
-            self.send_to_all_users_over_websocket({'game_start': True, 'image': str(task.image)})
+            self.send_to_all_users_over_websocket({'game_start': True, 'image': settings.MEDIA_URL + str(task.image)})
             self.current_task_no += 1
 
     def send_complete_info_about_game(self):

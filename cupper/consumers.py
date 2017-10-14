@@ -2,7 +2,12 @@ import json
 
 from channels import Channel
 
+from cupper import urls
 from game.game_manager import GameManager
+from game.urls import set_urls
+
+
+set_urls({'final_room': urls.FINAL_ROOM, })
 
 
 def ws_connect(message):
