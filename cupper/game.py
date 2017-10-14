@@ -184,8 +184,12 @@ class Room:
 
         if self.type == Room.DEFAULT_NAME:
             final_room = GameManager.get_final_game().is_free_rooms()
-            #final_room.add_user_id_to_potential_member(user_id_winner)
-            GameManager.allowed_users_id_for_final[self.id] = [user_id_winner]
+            # final_room.add_user_id_to_potential_member(user_id_winner)
+            if self.id in GameManager.allowed_users_id_for_final:
+                GameManager.allowed_users_id_for_final[self.id].append(user_id_winner)
+            else:
+                GameManager.allowed_users_id_for_final[self.id] = [user_id_winner]
+
             final_room_id = final_room.id
 
             url_to_final_room = "/final_room/" + str(final_room_id)
