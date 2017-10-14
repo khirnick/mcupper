@@ -1,8 +1,9 @@
 import json
 
-from channels import Channel, Group
+from channels import Channel
 
-from cupper.game import GameManager, Room
+from game.game_manager import GameManager
+from game.room import Room
 
 
 def ws_connect(message):

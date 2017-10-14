@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
-    'cupper.apps.CupperConfig'
+    'cupper.apps.CupperConfig',
+    'game.apps.GameConfig'
 ]
 
 CHANNEL_LAYERS = {

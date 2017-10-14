@@ -13,7 +13,7 @@ from django.views.generic import DetailView
 
 from cupper.forms import SignupForm, LoginForm
 from cupper.models import Profile
-from cupper.game import GameManager
+from game.game_manager import GameManager
 from cupper.token_registration import token_registration
 
 
