@@ -4,6 +4,31 @@ from django.contrib.auth.models import User
 
 from cupper.models import Task
 
+"""
+Сделать GameManager класс, в котором будут объекты игры для DEFAULT Rooms и FINAL Rooms
+Добавить словарь allowed_users вида {'roomN': [users]} для допуска пользователей к финальной комнате
+"""
+
+
+class GameManager:
+    def __init__(self):
+        self.allowed_users_id_for_final = {}
+
+        self.qualifying_game = Game(Room.DEFAULT_NAME)
+        self.final_game = Game(Room.FINAL_NAME)
+
+        self.qualifying_game.add_room()
+        self.qualifying_game.add_room()
+
+        self.final_game.add_room()
+        self.final_game.add_room()
+
+    def get_qualifying_game(self):
+        return self.qualifying_game
+
+    def get_final_game(self):
+        return self.final_game
+
 
 class Game:
     def __init__(self, rooms_type):
@@ -76,9 +101,11 @@ class Room:
             return False
 
         if self.private_room:
-            print(user_id)
-            if user_id not in self.user_channels:
+            print(GameManager.allowed_users_id_for_final)
+            if user_id not in GameManager.allowed_users_id_for_final[self.id]:
                 return False
+
+        print('now Im in private final room: ', self.type)
 
         user = self.user_channels.get(user_id)
 
@@ -156,8 +183,9 @@ class Room:
         user_id_winner = self.get_user_id_of_winner()
 
         if self.type == Room.DEFAULT_NAME:
-            final_room = FinalGameMain.is_free_rooms()
-            final_room.add_user_id_to_potential_member(user_id_winner)
+            final_room = GameManager.get_final_game().is_free_rooms()
+            #final_room.add_user_id_to_potential_member(user_id_winner)
+            GameManager.allowed_users_id_for_final[self.id] = [user_id_winner]
             final_room_id = final_room.id
 
             url_to_final_room = "/final_room/" + str(final_room_id)
@@ -175,10 +203,4 @@ class Room:
                 self.send_to_user_over_websocket_by_id(user_id, {'ifloser': True})
 
 
-GameMain = Game(Room.DEFAULT_NAME)
-GameMain.add_room()
-GameMain.add_room()
-
-FinalGameMain = Game(Room.FINAL_NAME)
-FinalGameMain.add_room()
-FinalGameMain.add_room()
+GameManager = GameManager()

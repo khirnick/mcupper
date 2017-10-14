@@ -13,7 +13,7 @@ from django.views.generic import DetailView
 
 from cupper.forms import SignupForm, LoginForm
 from cupper.models import Profile
-from cupper.game import Game, GameMain, FinalGameMain
+from cupper.game import GameManager
 from cupper.token_registration import token_registration
 
 
@@ -113,15 +113,15 @@ def profile(request):
 
 
 def game(request):
-    room = GameMain.is_free_rooms()
+    room = GameManager.get_qualifying_game().is_free_rooms()
     return render(request, 'cupper/game.html', {'room': room})
 
 
 def room(request, room_id):
-    room = GameMain.get_room_by_id(int(room_id))
+    room = GameManager.get_qualifying_game().get_room_by_id(int(room_id))
     return render(request, 'cupper/room.html', {'room': room})
 
 
 def final_room(request, room_id):
-    room = FinalGameMain.get_room_by_id(int(room_id))
+    room = GameManager.get_final_game().get_room_by_id(int(room_id))
     return render(request, 'cupper/room.html', {'room': room})
