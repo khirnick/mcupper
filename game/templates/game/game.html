@@ -1,8 +1,8 @@
-{% extends 'cupper/base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
     <div class="container white-text" style="text-align: center">
-        <a class="btn" href="{% url 'cupper:room' room.id %}">Комната {{ room.id }}</a><br/>
+        <a class="btn" href="{% url 'game:room' room.id %}">Комната {{ room.id }}</a><br/>
     </div>
 {% endblock %}
 

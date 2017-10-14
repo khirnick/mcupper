@@ -23,5 +23,6 @@ urlpattern_media = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('cupper.urls')),
+    url(r'^game/', include('game.urls')),
 ] + urlpattern_media
 

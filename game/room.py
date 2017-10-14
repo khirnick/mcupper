@@ -137,7 +137,7 @@ class Room:
 
             final_room_id = final_room.id
 
-            url_to_final_room = "/final_room/" + str(final_room_id)
+            url_to_final_room = settings.ROOM_URLS['final_room'] + str(final_room_id)
             self.send_to_user_over_websocket_by_id(user_id_winner, {'ifwinner': True,
                                                                     'link_to_final_room': url_to_final_room})
         else:

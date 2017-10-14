@@ -146,3 +146,10 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 MEDIA_ROOT = os.path.join('media')
 MEDIA_URL = '/media/'
+
+GAME_APP_NAME = 'game'
+
+ROOM_URLS = {
+    'final_room': '/{0}/final_room/'.format(GAME_APP_NAME),
+    'room': '/{0}/room/'.format(GAME_APP_NAME),
+}
