@@ -27,5 +27,15 @@ class GameManager:
         else:
             self.allowed_users_id_for_final[room_id] = [user_id]
 
+    def delete_disconnected_users_from_all_rooms_in_all_games(self, channel):
+        self.qualifying_game.delete_disconnected_user_from_rooms(channel)
+        self.final_game.delete_disconnected_user_from_rooms(channel)
+
+    def get_room_based_on_type_and_id(self, room_type, id):
+        if room_type == Room.FINAL_NAME:
+            return self.final_game.get_room_by_id(id)
+
+        return self.qualifying_game.get_room_by_id(id)
+
 
 GameManager = GameManager()

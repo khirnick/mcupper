@@ -3,7 +3,6 @@ import json
 from channels import Channel
 
 from game.game_manager import GameManager
-from game.room import Room
 
 
 def ws_connect(message):
@@ -19,23 +18,15 @@ def ws_receive(message):
 
 
 def ws_disconnect(message):
-    #FinalGameMain.delete_disconnected_user_from_rooms(message.reply_channel)
-    #FinalGameMain.update_user_group()
-    #GameMain.delete_disconnected_user_from_rooms(message.reply_channel)
-    #GameMain.update_user_group()
-    pass
+    GameManager.delete_disconnected_users_from_all_rooms_in_all_games(message.reply_channel)
 
 
 def room_join(message):
     user_id = int(message.content['user_id'])
     room_id = int(message.content['room'])
+    room_type = message.content['room_type']
 
-    room = None
-
-    if message.content['room_type'] == Room.FINAL_NAME:
-        room = GameManager.get_final_game().get_room_by_id(room_id)
-    else:
-        room = GameManager.get_qualifying_game().get_room_by_id(room_id)
+    room = GameManager.get_room_based_on_type_and_id(room_type, room_id)
 
     if room.add_user_channel(user_id, message.reply_channel):
         room.update_user_group()
@@ -48,13 +39,9 @@ def room_join(message):
 def room_leave(message):
     user_id = int(message.content['user_id'])
     room_id = int(message.content['room'])
+    room_type = message.content['room_type']
 
-    room = None
-
-    if message.content['room_type'] == Room.FINAL_NAME:
-        room = GameManager.get_final_game().get_room_by_id(room_id)
-    else:
-        room = GameManager.get_qualifying_game().get_room_by_id(room_id)
+    room = GameManager.get_room_based_on_type_and_id(room_type, room_id)
 
     room.delete_left_user_by_user_id(user_id)
     room.update_user_group()
@@ -64,15 +51,9 @@ def room_answer(message):
     answer = message.content['answer']
     room_id = int(message.content['room'])
     user_id = int(message.content['user_id'])
+    room_type = message.content['room_type']
 
-    room = None
-
-    print(message.content['room_type'])
-
-    if message.content['room_type'] == Room.FINAL_NAME:
-        room = GameManager.get_final_game().get_room_by_id(room_id)
-    else:
-        room = GameManager.get_qualifying_game().get_room_by_id(room_id)
+    room = GameManager.get_room_based_on_type_and_id(room_type, room_id)
 
     room.check_answer(user_id, answer)
     room.continue_game_with_next_question()
