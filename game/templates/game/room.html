@@ -50,10 +50,12 @@
                 if (data.game_start) {
                     var img_src = data.image;
                     document.getElementById("game").innerHTML = "<img width='40%' src='" + img_src + "'/>"
-                    document.getElementById("game").innerHTML += "<input type='text' size='40px' width='40px' maxlength='10' id='res'/>"
+                    document.getElementById("game").innerHTML += "<input type='text' size='40px' width='40px' maxlength='10' id='res' autofocus />"
                     document.getElementById("game").innerHTML += "<button class='btn' id='go_result'>Ответить</button>"
 
                     document.getElementById("manage-buttons").innerHTML = ""
+
+                    document.getElementById('res').focus()
 
                     $('#go_result').click( function (e) {
                         var res = document.getElementById("res").value;

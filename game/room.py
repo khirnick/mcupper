@@ -9,7 +9,7 @@ from mcupper import settings
 class Room:
     FINAL_NAME = 'final'
     DEFAULT_NAME = 'default'
-    DEFAULT_TASK_LIMIT = 5
+    DEFAULT_TASK_LIMIT = 20
     DEFAULT_MAX_CHANNELS = 2
 
     def __init__(self, id_room, type_room, game_manager_ref,
