@@ -101,9 +101,9 @@ class Room:
         user_group = ''
         for user_id, channel in self.user_channels.items():
             username = User.objects.get(id=user_id).username
-            user_group += "{0}\n".format(username)
+            user_group += "{0}, ".format(username)
 
-        self.send_to_all_users_over_websocket({'user_id': user_group})
+        self.send_to_all_users_over_websocket({'user_id': user_group.rstrip(', ')})
 
     def create_user_scores_dict(self):
         for user_id, channel in self.user_channels.items():
