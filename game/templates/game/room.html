@@ -77,7 +77,7 @@
                 }
                 if(data.ifwinner) {
                     if (data.ifwinner === true) {
-                        document.getElementById("if-winner").innerHTML = "Вы выиграли, комната для финала: "
+                        document.getElementById("if-winner").innerHTML = "Вы выиграли, перейдите по ссылке для подключения к финалу... "
                         document.getElementById("u1").innerHTML = document.getElementById("game").innerHTML = ""
                     }
                 }
@@ -88,7 +88,7 @@
                 }
                 if(data.link_to_final_room){
                     var link = data.link_to_final_room;
-                    document.getElementById("link_to_final").innerHTML = "<h5><a href='" + link + "'> НАЖМИТЕ </a><h5>"
+                    document.getElementById("link_to_final").innerHTML = "<h5><a href='" + link + "'>Финальный этап</a><h5>"
                 }
             }
 
