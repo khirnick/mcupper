@@ -66,6 +66,12 @@
 
                         }));
                     });
+
+                    $('#res').keypress(function (e) {
+                        if (e.keyCode == 13) {
+                            $('#go_result').click()
+                        }
+                    })
                 }
                 if(data.ifwinner) {
                     if (data.ifwinner === true) {
