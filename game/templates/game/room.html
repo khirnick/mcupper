@@ -5,22 +5,20 @@
 <div class="container white-text" style="text-align: center; margin-top: 15%">
     <h4>Вы находитесь в комнате <p style="display: inline" id="room">{{ room.id }}</p></h4>
     <h5 id="u1">
-        {% if user.id in room.user_channels %}
-            Состав комнаты:
-            {% for key, value in room.user_channels.items %}
-                {{ key }}
-            {% endfor %}
-        {% endif %}
+
     </h5>
 
-    <p id="if-winner"></p>
+    <h5 id="if-winner"></h5>
 
-    <button class="btn btn-large" id="go">Присоединиться</button>
-    <button class="btn btn-large" id="leave">Покинуть</button>
+    <div id="manage-buttons">
+        <button class="btn btn-large" id="go">Присоединиться</button>
+        <button class="btn btn-large" id="leave">Покинуть</button>
+    </div>
+
 
     <div id="link_to_final"></div>
 
-    <div id="game">
+    <div id="game" class="container">
 
     </div>
 </div>
@@ -36,7 +34,9 @@
             var room_id = document.getElementById("room").innerHTML;
 
             var user_id = "{{ user.id }}";
+            var user = "{{ user }}";
             var room_type = "{{ room.type }}"
+            var usernames = {{ room.get_all_usernames }}
 
 
             ws.onmessage = function (msg) {
@@ -49,9 +49,12 @@
                 }
                 if (data.game_start) {
                     var img_src = data.image;
-                    document.getElementById("game").innerHTML = "<img width='30%' src='" + img_src + "'/>"
-                    document.getElementById("game").innerHTML += "<textarea id='res'/>"
+                    document.getElementById("game").innerHTML = "<img width='40%' src='" + img_src + "'/>"
+                    document.getElementById("game").innerHTML += "<input type='text' size='40px' width='40px' maxlength='10' id='res'/>"
                     document.getElementById("game").innerHTML += "<button class='btn' id='go_result'>Ответить</button>"
+
+                    document.getElementById("manage-buttons").innerHTML = ""
+
                     $('#go_result').click( function (e) {
                         var res = document.getElementById("res").value;
                         ws.send(JSON.stringify({
@@ -66,7 +69,7 @@
                 }
                 if(data.ifwinner) {
                     if (data.ifwinner === true) {
-                        document.getElementById("if-winner").innerHTML = "Вы выиграли"
+                        document.getElementById("if-winner").innerHTML = "Вы выиграли, комната для финала: "
                         document.getElementById("u1").innerHTML = document.getElementById("game").innerHTML = ""
                     }
                 }
@@ -77,7 +80,7 @@
                 }
                 if(data.link_to_final_room){
                     var link = data.link_to_final_room;
-                    document.getElementById("link_to_final").innerHTML = "<a href='" + link + "'> next </a>"
+                    document.getElementById("link_to_final").innerHTML = "<h5><a href='" + link + "'> НАЖМИТЕ </a><h5>"
                 }
             }
 
@@ -86,8 +89,7 @@
                     "command": "join",
                     "room": room_id,
                     "user_id": user_id,
-                    "room_type": room_type
-
+                    "room_type": room_type,
                 }));
 
                 document.getElementById("if-winner").innerHTML = ""

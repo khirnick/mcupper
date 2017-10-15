@@ -100,7 +100,8 @@ class Room:
     def update_user_group(self):
         user_group = ''
         for user_id, channel in self.user_channels.items():
-            user_group += "{0}\n".format(user_id)
+            username = User.objects.get(id=user_id).username
+            user_group += "{0}\n".format(username)
 
         self.send_to_all_users_over_websocket({'user_id': user_group})
 
