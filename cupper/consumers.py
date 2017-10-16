@@ -23,7 +23,7 @@ def ws_disconnect(message):
 
 def room_join(message):
     user_id = int(message.content['user_id'])
-    room_id = int(message.content['room'])
+    room_id = int(message.content['room_id'])
     room_type = message.content['room_type']
 
     room = GameManager.get_room_based_on_type_and_id(room_type, room_id)
@@ -38,7 +38,7 @@ def room_join(message):
 
 def room_leave(message):
     user_id = int(message.content['user_id'])
-    room_id = int(message.content['room'])
+    room_id = int(message.content['room_id'])
     room_type = message.content['room_type']
 
     room = GameManager.get_room_based_on_type_and_id(room_type, room_id)
@@ -49,7 +49,7 @@ def room_leave(message):
 
 def room_answer(message):
     answer = message.content['answer']
-    room_id = int(message.content['room'])
+    room_id = int(message.content['room_id'])
     user_id = int(message.content['user_id'])
     room_type = message.content['room_type']
 

@@ -1,12 +1,8 @@
 {% extends 'base.html' %}
-{% block content %}
 
+{% block content %}
     <div class="container white-text " style="text-align: center;">
         <h5>Добро пожаловать в <b>mcupper</b>! Для начала игры нажмите кнопку снизу</h5><br/>
         <a class="btn btn-large" href="{% url 'game:game' %}">Войти в поиск комнат</a>
     </div>
-
-{% endblock %}
-
-{% block script_block %}
 {% endblock %}

@@ -79,7 +79,7 @@ class Room:
         if answer == self.current_task.correct_answer:
             self.user_scores[user_id_answered] += 1
         else:
-            self.user_scores[user_id_answered] += 1
+            self.user_scores[user_id_answered] -= 1
 
     def reset_room(self):
         self.game_is_online = False
@@ -103,7 +103,7 @@ class Room:
             username = User.objects.get(id=user_id).username
             user_group += "{0}, ".format(username)
 
-        self.send_to_all_users_over_websocket({'user_id': user_group.rstrip(', ')})
+        self.send_to_all_users_over_websocket({'users_group': user_group.rstrip(', ')})
 
     def create_user_scores_dict(self):
         for user_id, channel in self.user_channels.items():
@@ -139,8 +139,10 @@ class Room:
             final_room_id = final_room.id
 
             url_to_final_room = settings.ROOM_URLS['final_room'] + str(final_room_id)
-            self.send_to_user_over_websocket_by_id(user_id_winner, {'ifwinner': True,
+            self.send_to_user_over_websocket_by_id(user_id_winner, {'user_is_winner': True,
                                                                     'link_to_final_room': url_to_final_room})
+
+            print(self.user_scores)
         else:
             user_winner = User.objects.get(pk=user_id_winner)
             user_winner.profile.score += 1
@@ -148,8 +150,8 @@ class Room:
 
             self.game_manager_ref.allowed_users_id_for_final.clear()
 
-            self.send_to_user_over_websocket_by_id(user_id_winner, {'ifwinner': True})
+            self.send_to_user_over_websocket_by_id(user_id_winner, {'user_is_winner': True})
 
         for user_id, channel in self.user_channels.items():
             if user_id != user_id_winner:
-                self.send_to_user_over_websocket_by_id(user_id, {'ifloser': True})
+                self.send_to_user_over_websocket_by_id(user_id, {'user_is_loser': True})

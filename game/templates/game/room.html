@@ -1,28 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 <div class="container white-text" style="text-align: center;">
     <h4>Вы находитесь в комнате <p style="display: inline" id="room">{{ room.id }}</p></h4>
-    <h5 id="u1">
+    <h5 id="user-group"></h5>
 
-    </h5>
-
-    <h5 id="if-winner"></h5>
+    <h5 id="game-result-for-user"></h5>
 
     <div id="manage-buttons">
-        <button class="btn btn-large" id="go">Присоединиться</button>
-        <button class="btn btn-large" id="leave">Покинуть</button>
+        <button class="btn btn-large" id="connect-to-room">Присоединиться</button>
+        <button class="btn btn-large" id="leave-room">Покинуть</button>
     </div>
 
+    <div id="link-to-final-room"></div>
 
-    <div id="link_to_final"></div>
-
-    <div id="game" class="container">
-
-    </div>
+    <div id="game" class="container"></div>
 </div>
-
 {% endblock %}
 
 {% block script_block %}
@@ -34,88 +27,93 @@
             var room_id = document.getElementById("room").innerHTML;
 
             var user_id = "{{ user.id }}";
-            var user = "{{ user }}";
-            var room_type = "{{ room.type }}"
-            var usernames = {{ room.get_all_usernames }}
-
+            var room_type = "{{ room.type }}";
 
             ws.onmessage = function (msg) {
-                var data = JSON.parse(msg.data)
+                var data = JSON.parse(msg.data);
+
                 if (data.user_leave){
-                    document.getElementById("u1").innerHTML = ""
+                    document.getElementById("user-group").innerHTML = ""
                 }
-                if (data.user_id) {
-                    document.getElementById("u1").innerHTML = "Состав комнаты: " + data.user_id;
+
+                if (data.users_group) {
+                    document.getElementById("user-group").innerHTML = "Состав комнаты: " + data.users_group;
                 }
+
                 if (data.game_start) {
                     var img_src = data.image;
-                    document.getElementById("game").innerHTML = "<img width='40%' src='" + img_src + "'/>"
-                    document.getElementById("game").innerHTML += "<input type='text' size='40px' width='40px' maxlength='10' id='res' autofocus />"
-                    document.getElementById("game").innerHTML += "<button class='btn' id='go_result'>Ответить</button>"
+                    document.getElementById("game").innerHTML = "<img width='40%' src='" + img_src + "'/>";
+                    document.getElementById("game").innerHTML += "<input type='text' size='40px' width='40px' " +
+                        "maxlength='10' id='answer-input' autofocus />";
 
-                    document.getElementById("manage-buttons").innerHTML = ""
+                    document.getElementById("game").innerHTML += "<button class='btn' id='answer-button'>Ответить" +
+                        "</button>";
 
-                    document.getElementById('res').focus()
+                    document.getElementById("manage-buttons").innerHTML = "";
 
-                    $('#go_result').click( function (e) {
-                        var res = document.getElementById("res").value;
+                    document.getElementById('answer-input').focus();
+
+                    $('#answer-button').click( function (e) {
+                        var answer = document.getElementById("answer-input").value;
+
                         ws.send(JSON.stringify({
                             "command": "answer",
-                            "room": room_id,
+                            "room_id": room_id,
                             "user_id": user_id,
-                            "answer": res,
+                            "answer": answer,
                             "room_type": room_type
 
                         }));
                     });
 
-                    $('#res').keypress(function (e) {
+                    $('#answer-input').keypress(function (e) {
                         if (e.keyCode == 13) {
-                            $('#go_result').click()
+                            $('#answer-button').click()
                         }
                     })
                 }
-                if(data.ifwinner) {
-                    if (data.ifwinner === true) {
-                        document.getElementById("if-winner").innerHTML = "Вы выиграли, перейдите по ссылке для подключения к финалу... "
-                        document.getElementById("u1").innerHTML = document.getElementById("game").innerHTML = ""
+
+                if(data.user_is_winner) {
+                    if (data.user_is_winner === true) {
+                        document.getElementById("game-result-for-user").innerHTML = "Вы выиграли, перейдите по ссылке" +
+                            " для подключения к финалу... ";
+
+                        document.getElementById("user-group").innerHTML = document.getElementById("game").innerHTML = ""
                     }
                 }
-                if(data.ifloser) {
-                    document.getElementById("if-winner").innerHTML = "Вы проиграли"
-                    document.getElementById("u1").innerHTML = document.getElementById("game").innerHTML = ""
+
+                if(data.user_is_loser) {
+                    document.getElementById("game-result-for-user").innerHTML = "Вы проиграли";
+                    document.getElementById("user-group").innerHTML = document.getElementById("game").innerHTML = ""
 
                 }
+
                 if(data.link_to_final_room){
                     var link = data.link_to_final_room;
-                    document.getElementById("link_to_final").innerHTML = "<h5><a href='" + link + "'>Финальный этап</a><h5>"
-                }
-            }
 
-            $('#go').click(function (e) {
+                    document.getElementById("link-to-final-room").innerHTML = "<h5><a href='" + link + "'>" +
+                        "Финальный этап</a><h5>"
+                }
+            };
+
+            $('#connect-to-room').click(function (e) {
                 ws.send(JSON.stringify({
                     "command": "join",
-                    "room": room_id,
+                    "room_id": room_id,
                     "user_id": user_id,
-                    "room_type": room_type,
+                    "room_type": room_type
                 }));
 
-                document.getElementById("if-winner").innerHTML = ""
+                document.getElementById("game-result-for-user").innerHTML = ""
+            });
 
-                //document.getElementById('go').id = 'leave';
-                //document.getElementById('leave').innerHTML = 'leave';
-            })
-
-            $('#leave').click(function (e) {
+            $('#leave-room').click(function (e) {
                 ws.send(JSON.stringify({
                     "command": "leave",
-                    "room": room_id,
+                    "room_id": room_id,
                     "user_id": user_id,
                     "room_type": room_type
                 }))
-
-                //document.getElementById('leave').id = 'go';
-                //document.getElementById('go').innerHTML = 'go';
             })
         });
 

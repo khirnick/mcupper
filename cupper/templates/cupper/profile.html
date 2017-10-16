@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
-{% block content %}
 
-<div class="container white-text" style="text-align: center">
-    <h1 class="white-text">Профиль</h1><br/>
-{% if user.is_authenticated %}
-    <p>Имя пользователя: {{ user.username }}</p>
-    <p>Email: {{ user.email }}</p>
-    <p>Очки: {{ user.profile.score }}</p>
-    <p><a class="btn-large btn" href="{% url 'cupper:profile_settings' %}" >Изменить пароль</a></p>
-{% else %}
-    <p>Вы не авторизованы</p>
-{% endif %}
-</div>
+{% block content %}
+    <div class="container white-text" style="text-align: center">
+        <h1 class="white-text">Профиль</h1><br/>
+        {% if user.is_authenticated %}
+            <p>Имя пользователя: {{ user.username }}</p>
+            <p>Email: {{ user.email }}</p>
+            <p>Очки: {{ user.profile.score }}</p>
+            <p><a class="btn-large btn" href="{% url 'cupper:profile_settings' %}" >Изменить пароль</a></p>
+        {% else %}
+            <p>Вы не авторизованы</p>
+        {% endif %}
+    </div>
 {% endblock %}
