@@ -2,6 +2,14 @@ from django.db import models
 
 
 class Task(models.Model):
+    """
+    Модель задания:
+        - заголовок задания
+        - описание задания
+        - ссылка на картинку задания
+        - правильный ответ
+    """
+
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=1000)
     image = models.ImageField(upload_to='tasks')
@@ -12,6 +20,11 @@ class Task(models.Model):
 
     @staticmethod
     def get_random_task():
+        """
+        Получить случайное задание
+        :return: объект задания
+        """
+
         tasks = Task.objects.all()
         first_index = tasks.first().pk
         last_index = tasks.last().pk
