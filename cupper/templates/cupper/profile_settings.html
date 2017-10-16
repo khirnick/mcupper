@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container white-text" style="text-align: center">
+     <h1 class="white-text">Изменение пароля</h1><br/>
+        <h6>{{ form.non_field_errors }}</h6>
+    {% if if_password_changed %}
+        <h6>{{ if_password_changed }}</h6>
+    {% endif %}
+    <form method="post" class="form-group">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="form-group white-text">
+        {{ field }} {{ field.errors }}
+        </div>
+    {% endfor %}
+    <input class="btn btn-large" type="submit" value="Изменить" />
+    </form>
+    </div>
+{% endblock %}

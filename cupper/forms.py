@@ -1,3 +1,4 @@
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django import forms
 
@@ -71,3 +72,34 @@ class LoginForm(forms.Form):
         return self.cleaned_data['username']
 
 
+class ProfileSettingsForm(forms.Form):
+    username = forms.CharField(max_length=30, label='Логин', widget=forms.TextInput(attrs={'readonly': True}))
+
+    email = forms.EmailField(label='Email', widget=forms.TextInput(attrs={'readonly': True}))
+
+    new_password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}), label='Пароль',
+                                   help_text='Пароль должен содержать минимум 4 символа')
+
+    new_password_check = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Повторите пароль'}), label='Пароль',
+                                         help_text='Пароль должен содержать минимум 4 символа')
+
+    def __init__(self, user, *args, **kwargs):
+        super(ProfileSettingsForm, self).__init__(*args, **kwargs)
+
+        self.user = user
+
+    def clean(self):
+        cd = self.cleaned_data
+        new_password = cd.get('new_password')
+        new_password_check = cd.get('new_password_check')
+
+        if new_password and new_password_check and new_password != new_password_check:
+            raise forms.ValidationError('Введенные пароли не совпадают', code='passwords_dont_match')
+
+    def save(self):
+
+        cd = self.cleaned_data
+        new_password = cd['new_password']
+
+        self.user.set_password(new_password)
+        self.user.save()

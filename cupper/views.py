@@ -11,7 +11,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth import authenticate, login
 from django.views.generic import DetailView
 
-from cupper.forms import SignupForm, LoginForm
+from cupper.forms import SignupForm, LoginForm, ProfileSettingsForm
 from cupper.models import Profile
 from game.game_manager import GameManager
 from cupper.token_registration import token_registration
@@ -110,3 +110,24 @@ def logged_out(request):
 
 def profile(request):
     return render(request, 'cupper/profile.html')
+
+
+def profile_settings(request):
+    user = request.user
+    default_form_when_password_changed = ProfileSettingsForm(user, initial={'email': user.email,
+                                                                            'username': user.username})
+
+    if request.method == "POST":
+        form = ProfileSettingsForm(user, request.POST)
+        if form.is_valid():
+            form.save()
+
+            auth.login(request, user)
+
+            return render(request, 'cupper/profile_settings.html', {'form': default_form_when_password_changed,
+                                                                    'if_password_changed': 'Пароль успешно изменен'})
+    else:
+        form = ProfileSettingsForm(user, initial={'email': user.email, 'username': user.username})
+
+    print(form.errors)
+    return render(request, 'cupper/profile_settings.html', {'form': form})
