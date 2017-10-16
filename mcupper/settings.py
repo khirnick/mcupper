@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+from mcupper.email_settings import USER_EMAIL, PASSWORD_EMAIL
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -129,25 +131,29 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
+# Root и static ссылки
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join('static'), )
 
+# Настройки для отправки почты
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'mcupperactivation@gmail.com'
-EMAIL_HOST_PASSWORD = 'mcproject387'
+EMAIL_HOST_USER = USER_EMAIL
+EMAIL_HOST_PASSWORD = PASSWORD_EMAIL
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+# Ссылки на папку с медиа
+
 MEDIA_ROOT = os.path.join('media')
 MEDIA_URL = '/media/'
+
+# Имя игрового приложения и URL для него
 
 GAME_APP_NAME = 'game'
 

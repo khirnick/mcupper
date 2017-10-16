@@ -1,3 +1,8 @@
+"""
+Модуль для обработки websocket запросов
+Используется фреймворк django-channels
+"""
+
 import json
 
 from channels import Channel
@@ -6,10 +11,24 @@ from game.game_manager import GameManager
 
 
 def ws_connect(message):
+    """
+    Подтверждение на установку соединения пользователя
+    :param message: полное сообщение со всей информацией
+    """
+
     message.reply_channel.send({'accept': True})
 
 
 def ws_receive(message):
+    """
+    Реакция на отправку сообщения пользователем
+    Распарсивание сообщение в формате JSON
+
+    Происходит перенаправление на другой канал - на кастомный, который со стороны клиента
+    указан в 'command'
+    :param message: полное сообщение со всей информацией
+    """
+
     message_text = json.loads(message['text'])
     message_to_another_channel = message_text
     message_to_another_channel['reply_channel'] = message.content['reply_channel']
@@ -18,10 +37,26 @@ def ws_receive(message):
 
 
 def ws_disconnect(message):
+    """
+    Реакция при отсоединении пользователя
+
+    Происходит отсоединение от всех комнат в каждой игре
+    :param message: полное сообщение со всей информацией
+    """
+
     GameManager.delete_disconnected_users_from_all_rooms_in_all_games(message.reply_channel)
 
 
 def room_join(message):
+    """
+    Реакция при присоединении игрока к комнате
+
+    Происходит обновление списка пользователей, который отсылается всем пользователям
+    в комнате
+    Когда комната заполнена, начинается игра
+    :param message: полное сообщение со всей информацией
+    """
+
     user_id = int(message.content['user_id'])
     room_id = int(message.content['room_id'])
     room_type = message.content['room_type']
@@ -37,6 +72,14 @@ def room_join(message):
 
 
 def room_leave(message):
+    """
+    Реакция при отсоединении от комнаты
+
+    Пользователь удаляется из комнаты
+    Всем остальным отсылается новый список пользователей в комнате
+    :param message: полное сообщение со всей информацией
+    """
+
     user_id = int(message.content['user_id'])
     room_id = int(message.content['room_id'])
     room_type = message.content['room_type']
@@ -48,6 +91,14 @@ def room_leave(message):
 
 
 def room_answer(message):
+    """
+    Реакция на пришедший ответ от пользователя
+
+    Проверка на корректность
+    Продолжение игры с новым заданием
+    :param message: полное сообщение со всей информацией
+    """
+
     answer = message.content['answer']
     room_id = int(message.content['room_id'])
     user_id = int(message.content['user_id'])

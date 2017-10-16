@@ -4,15 +4,33 @@ from game.game_manager import GameManager
 
 
 def game(request):
-    room = GameManager.get_qualifying_game().is_free_rooms()
-    return render(request, 'game/game.html', {'room': room})
+    """
+    Рендеринг первоначальной страницы с комнатами отборочного этапа
+    :param request: запрос
+    :return: рендер страницы
+    """
+
+    first_free_qualifying_room = GameManager.get_qualifying_game().is_free_rooms()
+    return render(request, 'game/game.html', {'room': first_free_qualifying_room})
 
 
 def room(request, room_id):
-    room = GameManager.get_qualifying_game().get_room_by_id(int(room_id))
-    return render(request, 'game/room.html', {'room': room})
+    """
+    Рендеринг комнаты отборочного этапа
+    :param request: запрос
+    :param room_id: номер конаты
+    """
+
+    qualifying_room = GameManager.get_qualifying_game().get_room_by_id(int(room_id))
+    return render(request, 'game/room.html', {'room': qualifying_room})
 
 
 def final_room(request, room_id):
-    room = GameManager.get_final_game().get_room_by_id(int(room_id))
-    return render(request, 'game/room.html', {'room': room})
+    """
+    Рендеринг комнаты финального этапа
+    :param request: запрос
+    :param room_id: номер конаты
+    """
+
+    final_room = GameManager.get_final_game().get_room_by_id(int(room_id))
+    return render(request, 'game/room.html', {'room': final_room})

@@ -1,23 +1,29 @@
 from django.contrib import auth
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-from django.urls import reverse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.contrib.auth import authenticate, login
-from django.views.generic import DetailView
 
 from cupper.forms import SignupForm, LoginForm, ProfileSettingsForm
-from cupper.models import Profile
-from game.game_manager import GameManager
 from cupper.token_registration import token_registration
 
 
 def signup(request):
+    """
+    Вьюха регистрации
+
+    При корректности всей введенной информации происходит занесение пользователя
+    в БД с параметром 'is_active' = False
+    Высылается e-mail на указанный почтовый адрес для активации аккаунта
+    :param request: запрос
+    :return: перенаправление / рендер формы регистрации
+    """
+
     if request.method == "POST":
         form = SignupForm(request.POST)
 
@@ -51,10 +57,26 @@ def signup(request):
 
 
 def signup_success(request):
+    """
+    Вьюха успешной регистрации
+    :param request: запрос
+    :return: рендер страницы
+    """
+
     return render(request, 'cupper/signup_success.html')
 
 
 def activate(request, uidb64, token):
+    """
+    Вьюха активации
+
+    Происходит активации по токену и id пользователя (в кодировке base64) в URL
+    :param request: запрос
+    :param uidb64: id пользователя в base64 кодировке
+    :param token: токен регистрации
+    :return: рендер страницы успешной регистрации/неуспешной регистрации
+    """
+
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
@@ -71,14 +93,32 @@ def activate(request, uidb64, token):
 
 
 def activation_success(request):
+    """
+    Вьюха успешной активации
+    :param request: запрос
+    :return: рендер страницы успешной активации
+    """
+
     return render(request, 'cupper/activation_success.html')
 
 
 def index(request):
+    """
+    Вьюха главной страницы
+    :param request: запрос
+    :return: рендер главной страницы
+    """
+
     return render(request, 'cupper/index.html')
 
 
 def do_login(request):
+    """
+    Вьюха страницы авторизации
+    :param request: запрос
+    :return: рендер главной страницы при успешной авторизации / рендер логин страницы при неудаче
+    """
+
     if request.method == "POST":
         form = LoginForm(request.POST)
 
@@ -100,19 +140,37 @@ def do_login(request):
 
 
 def logout(request):
+    """
+    Вьюха логаута
+    :param request: запрос
+    :return: рендер главной страницы
+    """
+
     auth.logout(request)
     return HttpResponseRedirect('/')
 
 
-def logged_out(request):
-    return render(request, 'cupper/logged_out.html')
-
-
 def profile(request):
+    """
+    Вьюха профиля
+
+    Вывод информации о профиле
+    :param request: запрос
+    :return: рендер страницы профиля
+    """
+
     return render(request, 'cupper/profile.html')
 
 
 def profile_settings(request):
+    """
+    Вьюха страницы изменения пароля пользователя
+
+    :param request: запрос
+    :return: рендер страницы для изменения информации / рендер страницы с информацией о успешном
+    изменении пароль
+    """
+
     user = request.user
     default_form_when_password_changed = ProfileSettingsForm(user, initial={'email': user.email,
                                                                             'username': user.username})
@@ -129,5 +187,4 @@ def profile_settings(request):
     else:
         form = ProfileSettingsForm(user, initial={'email': user.email, 'username': user.username})
 
-    print(form.errors)
     return render(request, 'cupper/profile_settings.html', {'form': form})
