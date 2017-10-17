@@ -3,6 +3,7 @@
 {% block content %}
     <div class="container align-items-start white-text" style="text-align: center">
         <h1 class="white-text">Вход</h1><br/>
+        <h6>{{ form.non_field_errors }}</h6>
         <form method="post" class="form-group" style="vertical-align: middle">
             {% csrf_token %}
             {% for field in form %}

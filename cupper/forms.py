@@ -1,3 +1,4 @@
+from django.contrib import auth
 from django.contrib.auth.models import User
 from django import forms
 
@@ -95,6 +96,15 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}), label='Пароль',
                                help_text='Пароль должен содержать минимум 4 символа')
 
+    def clean(self):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+
+        user = auth.authenticate(username=username, password=password)
+
+        if not user:
+            raise forms.ValidationError('Неправильный логин или пароль', code='auth_trouble')
+
     def clean_username(self):
         """
         Проверка логина
@@ -106,8 +116,7 @@ class LoginForm(forms.Form):
         try:
             user = User.objects.get(username=self.cleaned_data['username'])
         except User.DoesNotExist:
-            raise forms.ValidationError('Пользователь с таким именем не существует',
-                                        code='user_doesnt_exist')
+            return
 
         if not user.is_active:
             raise forms.ValidationError('Пользователь не активирован',
