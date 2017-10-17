@@ -18,6 +18,10 @@ class Profile(models.Model):
 
 
 class News(models.Model):
+    """
+    Модель новости
+    """
+
     title = models.CharField(max_length=200)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -27,6 +31,11 @@ class News(models.Model):
 
     @staticmethod
     def get_news_by_relevance():
+        """
+        Получить все новости в обратном порядке (по актуальности)
+        :return: объект новостей
+        """
+
         news = News.objects.filter('-created_at')
 
 
