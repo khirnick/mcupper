@@ -29,13 +29,13 @@ class Room:
         :param max_channels: максимальное количество игроков в комнате
         """
 
-        self.game_manager_ref = game_manager_ref
+        self.__game_manager_ref = game_manager_ref
+        self.__user_channels = {}
+        self.__user_scores = {}
         self.current_task_no = 0
         self.task_limit = task_limit
         self.game_is_online = False
         self.max_channels = max_channels
-        self.user_channels = {}
-        self.user_scores = {}
         self.id = id_room
         self.current_task = None
         self.type = type_room
@@ -74,7 +74,7 @@ class Room:
         :return: является ли комната загруженной - True/False
         """
 
-        if len(self.user_channels) == self.max_channels:
+        if len(self.__user_channels) == self.max_channels:
             return True
 
     def add_user_channel(self, user_id, user_channel):
@@ -89,13 +89,13 @@ class Room:
             return False
 
         if self.private_room:
-            if user_id not in self.game_manager_ref.allowed_users_id_for_final[self.id]:
+            if user_id not in self.__game_manager_ref.allowed_users_id_for_final[self.id]:
                 return False
 
-        user = self.user_channels.get(user_id)
+        user = self.__user_channels.get(user_id)
 
         if user is None:
-            self.user_channels[user_id] = user_channel
+            self.__user_channels[user_id] = user_channel
 
         return True
 
@@ -108,7 +108,7 @@ class Room:
         :param data: данные
         """
 
-        for user_id, user_channel in self.user_channels.items():
+        for user_id, user_channel in self.__user_channels.items():
             user_channel.send({'text': json.dumps(data)})
 
     def send_to_user_over_websocket_by_id(self, user_id, data):
@@ -121,7 +121,7 @@ class Room:
         :param data: данные
         """
 
-        user_channel = self.user_channels.get(user_id)
+        user_channel = self.__user_channels.get(user_id)
 
         if user_channel is not None:
             user_channel.send({'text': json.dumps(data)})
@@ -131,7 +131,7 @@ class Room:
         Получить номер победителя
         """
 
-        return max(self.user_scores, key=self.user_scores.get)
+        return max(self.__user_scores, key=self.__user_scores.get)
 
     def check_answer(self, user_id_answered, answer):
         """
@@ -143,9 +143,9 @@ class Room:
         """
 
         if answer == self.current_task.correct_answer:
-            self.user_scores[user_id_answered] += 1
+            self.__user_scores[user_id_answered] += 1
         else:
-            self.user_scores[user_id_answered] -= 1
+            self.__user_scores[user_id_answered] -= 1
 
     def reset_room(self):
         """
@@ -153,8 +153,8 @@ class Room:
         """
 
         self.game_is_online = False
-        self.user_channels.clear()
-        self.user_scores.clear()
+        self.__user_channels.clear()
+        self.__user_scores.clear()
         self.current_task_no = 0
 
     def delete_left_user_by_user_id(self, user_id):
@@ -164,7 +164,7 @@ class Room:
         """
 
         self.send_to_user_over_websocket_by_id(user_id, {'user_leave': True})
-        self.user_channels.pop(user_id, None)
+        self.__user_channels.pop(user_id, None)
 
     def delete_disconnected_user_from_room(self, channel):
         """
@@ -172,9 +172,9 @@ class Room:
         :param channel: канал (websocket)
         """
 
-        for user_id, user_channel in self.user_channels.items():
+        for user_id, user_channel in self.__user_channels.items():
             if str(channel) == str(user_channel):
-                self.user_channels.pop(user_id, None)
+                self.__user_channels.pop(user_id, None)
                 break
 
     def update_user_group(self):
@@ -183,7 +183,7 @@ class Room:
         """
 
         user_group = ''
-        for user_id, channel in self.user_channels.items():
+        for user_id, channel in self.__user_channels.items():
             username = User.objects.get(id=user_id).username
             user_group += "{0}, ".format(username)
 
@@ -196,8 +196,8 @@ class Room:
         Вид: {'user_id': score}
         """
 
-        for user_id, channel in self.user_channels.items():
-            self.user_scores[int(user_id)] = 0
+        for user_id, channel in self.__user_channels.items():
+            self.__user_scores[int(user_id)] = 0
 
     def start_game(self):
         """
@@ -241,9 +241,9 @@ class Room:
         user_id_winner = self.get_user_id_of_winner()
 
         if self.type == Room.DEFAULT_NAME:
-            final_room = self.game_manager_ref.get_final_game().is_free_rooms()
+            final_room = self.__game_manager_ref.get_final_game().is_free_rooms()
 
-            self.game_manager_ref.add_user_id_to_final_room(self.id, user_id_winner)
+            self.__game_manager_ref.add_user_id_to_final_room(self.id, user_id_winner)
 
             final_room_id = final_room.id
 
@@ -256,10 +256,10 @@ class Room:
             user_winner.profile.score += 1
             user_winner.save()
 
-            self.game_manager_ref.allowed_users_id_for_final.clear()
+            self.__game_manager_ref.allowed_users_id_for_final.clear()
 
             self.send_to_user_over_websocket_by_id(user_id_winner, {'user_is_winner': True})
 
-        for user_id, channel in self.user_channels.items():
+        for user_id, channel in self.__user_channels.items():
             if user_id != user_id_winner:
                 self.send_to_user_over_websocket_by_id(user_id, {'user_is_loser': True})
