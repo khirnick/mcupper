@@ -7,7 +7,7 @@
             <p>Имя пользователя: {{ user.username }}</p>
             <p>Email: {{ user.email }}</p>
             <p>Очки: {{ user.profile.score }}</p>
-            <p><a class="btn-large btn" href="{% url 'cupper:profile_settings' %}" >Изменить пароль</a></p>
+            <p><a class="btn-large btn waves-effect" href="{% url 'cupper:profile_settings' %}" >Изменить пароль</a></p>
         {% else %}
             <p>Вы не авторизованы</p>
         {% endif %}

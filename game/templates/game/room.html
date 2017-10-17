@@ -8,8 +8,8 @@
     <h5 id="game-result-for-user"></h5>
 
     <div id="manage-buttons">
-        <button class="btn btn-large" id="connect-to-room">Присоединиться</button>
-        <button class="btn btn-large" id="leave-room">Покинуть</button>
+        <button class="btn btn-large waves-effect" id="connect-to-room">Присоединиться</button>
+        <button class="btn btn-large waves-effect" id="leave-room">Покинуть</button>
     </div>
 
     <div id="link-to-final-room"></div>
@@ -43,10 +43,12 @@
                 if (data.game_start) {
                     var img_src = data.image;
                     document.getElementById("game").innerHTML = "<img width='40%' src='" + img_src + "'/>";
-                    document.getElementById("game").innerHTML += "<input type='text' size='40px' width='40px' " +
+                    document.getElementById("game").innerHTML += "<input type='text' class='waves-effect' " +
+                        "size='40px' width='40px' " +
                         "maxlength='10' id='answer-input' autofocus />";
 
-                    document.getElementById("game").innerHTML += "<button class='btn' id='answer-button'>Ответить" +
+                    document.getElementById("game").innerHTML += "<button class='btn waves-effect' " +
+                        "id='answer-button'>Ответить" +
                         "</button>";
 
                     document.getElementById("manage-buttons").innerHTML = "";
