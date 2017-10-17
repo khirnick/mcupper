@@ -23,10 +23,12 @@ class Game:
         :return: объект комнаты
         """
 
-        new_room = self.rooms.append(Room(id_room=len(self.rooms), type_room=self.rooms_type,
-                                          game_manager_ref=self.game_manager_ref))
+        self.rooms.append(Room(id_room=len(self.rooms), type_room=self.rooms_type,
+                               game_manager_ref=self.game_manager_ref))
 
-        return new_room
+        added_room = self.rooms[-1]
+
+        return added_room
 
     def is_free_rooms(self):
         """
@@ -40,7 +42,9 @@ class Game:
             if not room.is_busy:
                 return room
 
-        return self.add_room()
+        new_room = self.add_room()
+
+        return new_room
 
     def get_room_by_id(self, id):
         """

@@ -11,6 +11,7 @@ def game(request):
     """
 
     first_free_qualifying_room = GameManager.get_qualifying_game().is_free_rooms()
+    print(first_free_qualifying_room.id)
     return render(request, 'game/game.html', {'room': first_free_qualifying_room})
 
 

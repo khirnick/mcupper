@@ -19,12 +19,6 @@ class GameManager:
         self.qualifying_game = Game(Room.DEFAULT_NAME, self)
         self.final_game = Game(Room.FINAL_NAME, self)
 
-        self.qualifying_game.add_room()
-        self.qualifying_game.add_room()
-
-        self.final_game.add_room()
-        self.final_game.add_room()
-
     def get_qualifying_game(self):
         """
         Возврат игры отборочного этапа
