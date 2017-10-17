@@ -238,6 +238,7 @@ class Room:
 
         Проигравшим отправляется сообщение, что он ипроиграли
         """
+
         user_id_winner = self.get_user_id_of_winner()
 
         if self.type == Room.DEFAULT_NAME:

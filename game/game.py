@@ -6,7 +6,7 @@ class Game:
     Класс игры - финальной или отборочной, содержащий список комнат
     """
 
-    def __init__(self, rooms_type):
+    def __init__(self, rooms_type, game_manager_ref):
         """
         Инициализация объекта игры
         :param rooms_type: тип комнат - финальные, отборочные
@@ -14,8 +14,9 @@ class Game:
 
         self.rooms = []
         self.rooms_type = rooms_type
+        self.game_manager_ref = game_manager_ref
 
-    def add_room(self, game_manager_ref):
+    def add_room(self):
         """
         Добавить комнату в игру
         :param game_manager_ref: ссылка на менеджер игр
@@ -23,18 +24,23 @@ class Game:
         """
 
         new_room = self.rooms.append(Room(id_room=len(self.rooms), type_room=self.rooms_type,
-                                          game_manager_ref=game_manager_ref))
+                                          game_manager_ref=self.game_manager_ref))
+
         return new_room
 
     def is_free_rooms(self):
         """
         Поиск первой доступной комнаты
+
+        Если все комнаты заняты, то создается новая
         :return: свободная комната
         """
 
         for room in self.rooms:
             if not room.is_busy:
                 return room
+
+        return self.add_room()
 
     def get_room_by_id(self, id):
         """
