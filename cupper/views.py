@@ -188,3 +188,7 @@ def profile_settings(request):
         form = ProfileSettingsForm(user, initial={'email': user.email, 'username': user.username})
 
     return render(request, 'cupper/profile_settings.html', {'form': form})
+
+
+def game_rules(request):
+    return render(request, 'cupper/game_rules.html')
