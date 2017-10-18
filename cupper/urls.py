@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'activation_success/$', views.activation_success),
 
     url(r'game_rules/$', views.game_rules, name='game_rules'),
+    url(r'best/$', views.best, name='best'),
 ]

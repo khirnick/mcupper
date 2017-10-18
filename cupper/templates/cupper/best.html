@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container white-text">
+    <h3 style="text-align: center;">Лучшие игроки</h3><br/>
+        <div>
+            {% if best_users %}
+                {% for best_user in best_users %}
+                    <p>{{ best_user.user.username }} - {{ best_user.score }}</p>
+                {% endfor %}
+            {% else %}
+                <h3>Игроки отсутсвуют</h3>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

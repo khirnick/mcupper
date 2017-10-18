@@ -16,6 +16,12 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
 
+    @staticmethod
+    def get_best_users():
+        users = Profile.objects.order_by('-score')[:5]
+        print(users)
+        return users
+
 
 class News(models.Model):
     """

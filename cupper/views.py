@@ -10,6 +10,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from cupper.forms import SignupForm, LoginForm, ProfileSettingsForm
+from cupper.models import Profile
 from cupper.token_registration import token_registration
 
 
@@ -194,3 +195,10 @@ def profile_settings(request):
 
 def game_rules(request):
     return render(request, 'cupper/game_rules.html')
+
+
+def best(request):
+    best_users = Profile.get_best_users()
+    print(best_users)
+
+    return render(request, 'cupper/best.html', {'best_users': best_users})
