@@ -99,6 +99,10 @@ class Room:
 
         return True
 
+    @property
+    def is_empty(self):
+        return len(self.__user_channels) == 0
+
     def send_to_all_users_over_websocket(self, data):
         """
         Отправить сообщение всем пользователем по websocket-у

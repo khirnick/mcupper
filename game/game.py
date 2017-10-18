@@ -38,6 +38,8 @@ class Game:
         :return: свободная комната
         """
 
+        self.clean_rooms()
+
         for room in self.rooms:
             if not room.is_busy and not room.game_is_online:
                 return room
@@ -45,6 +47,12 @@ class Game:
         new_room = self.add_room()
 
         return new_room
+
+    def clean_rooms(self):
+        for room in self.rooms:
+            if room.is_empty:
+                self.rooms.remove(room)
+
 
     def get_room_by_id(self, id):
         """
