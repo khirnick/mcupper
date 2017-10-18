@@ -11,7 +11,10 @@ def game(request):
     """
 
     first_free_qualifying_room = GameManager.get_qualifying_game().is_free_rooms()
-    print(first_free_qualifying_room.id)
+
+    if first_free_qualifying_room is None:
+        return render(request, 'game/game.html', {'rooms_exhausted': True})
+
     return render(request, 'game/game.html', {'room': first_free_qualifying_room})
 
 

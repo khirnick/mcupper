@@ -6,10 +6,17 @@
             <h5>Пожалуйста, зарегистрируйтесь или войдите, чтобы начать играть</h5>
         </div>
     {% else %}
-        <div class="container white-text" style="text-align: center">
-            <h5>Доступная для Вас комната:</h5>
-            <a class="btn waves-effect" href="{% url 'game:room' room.id %}">Комната {{ room.id }}</a><br/>
-        </div>
+        {% if room %}
+            <div class="container white-text" style="text-align: center">
+                <h5>Доступная для Вас комната:</h5>
+                <a class="btn waves-effect" href="{% url 'game:room' room.id %}">Комната {{ room.id }}</a><br/>
+            </div>
+        {% endif %}
+        {% if rooms_exhausted %}
+            <div class="container white-text" style="text-align: center">
+                <h5>Лимит комнат исчерпан. Пожалуйста, подождите...</h5>
+            </div>
+        {% endif %}
     {% endif %}
 {% endblock %}
 

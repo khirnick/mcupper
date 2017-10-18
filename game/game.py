@@ -25,6 +25,9 @@ class Game:
 
         new_room_id = self.find_first_not_busy_id_for_room()
 
+        if new_room_id is None:
+            return None
+
         self.rooms.append(Room(id_room=new_room_id, type_room=self.rooms_type,
                                game_manager_ref=self.game_manager_ref))
 
@@ -39,7 +42,7 @@ class Game:
             if room is None:
                 return potential_id
 
-        return -1
+        return None
 
     def is_free_rooms(self):
         """
@@ -57,6 +60,9 @@ class Game:
                 return room
 
         new_room = self.add_room()
+
+        if new_room is None:
+            return None
 
         return new_room
 
