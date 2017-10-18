@@ -53,7 +53,6 @@ class Game:
             if room.is_empty:
                 self.rooms.remove(room)
 
-
     def get_room_by_id(self, id):
         """
         Получить комнату по номеру
@@ -61,7 +60,9 @@ class Game:
         :return: объект комнаты
         """
 
-        return self.rooms[id]
+        for room in self.rooms:
+            if id == room.id:
+                return room
 
     def delete_disconnected_user_from_rooms(self, channel):
         """
