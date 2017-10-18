@@ -16,6 +16,7 @@ class Room:
     DEFAULT_NAME = 'default'
     DEFAULT_TASK_LIMIT = 20
     DEFAULT_MAX_CHANNELS = 2
+    MAX_ROOMS_IN_GAME = 100
 
     def __init__(self, id_room, type_room, game_manager_ref,
                  task_limit=DEFAULT_TASK_LIMIT,

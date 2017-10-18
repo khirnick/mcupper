@@ -23,12 +23,23 @@ class Game:
         :return: объект комнаты
         """
 
-        self.rooms.append(Room(id_room=len(self.rooms), type_room=self.rooms_type,
+        new_room_id = self.find_first_not_busy_id_for_room()
+
+        self.rooms.append(Room(id_room=new_room_id, type_room=self.rooms_type,
                                game_manager_ref=self.game_manager_ref))
 
         added_room = self.rooms[-1]
 
         return added_room
+
+    def find_first_not_busy_id_for_room(self):
+        for potential_id in range(Room.MAX_ROOMS_IN_GAME):
+            room = self.get_room_by_id(potential_id)
+
+            if room is None:
+                return potential_id
+
+        return -1
 
     def is_free_rooms(self):
         """
@@ -42,6 +53,7 @@ class Game:
 
         for room in self.rooms:
             if not room.is_busy and not room.game_is_online:
+                print('room id: ', room.id, '; busy: ', room.is_busy, ' ; is online: ', room.game_is_online)
                 return room
 
         new_room = self.add_room()
@@ -57,12 +69,14 @@ class Game:
         """
         Получить комнату по номеру
         :param id: номер комнаты
-        :return: объект комнаты
+        :return: объект комнаты. Если не найдена, то None
         """
 
         for room in self.rooms:
             if id == room.id:
                 return room
+
+        return None
 
     def delete_disconnected_user_from_rooms(self, channel):
         """
