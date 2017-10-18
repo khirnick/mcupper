@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container white-text" style="text-align: center">
-    <h5>Доступная для Вас комната:</h5>
-        <a class="btn waves-effect" href="{% url 'game:room' room.id %}">Комната {{ room.id }}</a><br/>
-    </div>
+    {% if user.is_anonymous %}
+        <div class="container white-text" style="text-align: center">
+            <h5>Пожалуйста, зарегистрируйтесь или войдите, чтобы начать играть</h5>
+        </div>
+    {% else %}
+        <div class="container white-text" style="text-align: center">
+            <h5>Доступная для Вас комната:</h5>
+            <a class="btn waves-effect" href="{% url 'game:room' room.id %}">Комната {{ room.id }}</a><br/>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block script_block %}
