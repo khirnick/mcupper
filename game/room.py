@@ -86,6 +86,8 @@ class Room:
         """
 
         if self.is_busy:
+            print('is busy')
+            user_channel.send({'text': json.dumps({'room_is_already_busy': True})})
             return False
 
         if self.private_room:

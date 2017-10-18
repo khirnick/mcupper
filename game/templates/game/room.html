@@ -9,6 +9,8 @@
         <div class="container white-text" style="text-align: center;">
             <h4>Вы находитесь в комнате <p style="display: inline" id="room">{{ room.id }}</p></h4>
 
+            <h5 id="room-is-already-busy"></h5>
+
             <h5 id="user-group"></h5>
 
             <h5 id="game-result-for-user"></h5>
@@ -45,6 +47,10 @@
 
                 if (data.users_group) {
                     document.getElementById("user-group").innerHTML = "Состав комнаты: " + data.users_group;
+                }
+
+                if (data.room_is_already_busy) {
+                    document.getElementById('room-is-already-busy').innerHTML = "Комната уже занята";
                 }
 
                 if (data.game_start) {
