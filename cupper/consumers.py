@@ -6,10 +6,12 @@
 import json
 
 from channels import Channel
+from channels.auth import channel_session_user_from_http, channel_session_user
 
 from game.game_manager import GameManager
 
 
+@channel_session_user_from_http
 def ws_connect(message):
     """
     Подтверждение на установку соединения пользователя
@@ -19,6 +21,7 @@ def ws_connect(message):
     message.reply_channel.send({'accept': True})
 
 
+@channel_session_user
 def ws_receive(message):
     """
     Реакция на отправку сообщения пользователем
@@ -30,12 +33,14 @@ def ws_receive(message):
     """
 
     message_text = json.loads(message['text'])
+
     message_to_another_channel = message_text
     message_to_another_channel['reply_channel'] = message.content['reply_channel']
 
     Channel("cupper.receive").send(message_to_another_channel)
 
 
+@channel_session_user
 def ws_disconnect(message):
     """
     Реакция при отсоединении пользователя
@@ -47,6 +52,7 @@ def ws_disconnect(message):
     GameManager.delete_disconnected_users_from_all_rooms_in_all_games(message.reply_channel)
 
 
+@channel_session_user
 def room_join(message):
     """
     Реакция при присоединении игрока к комнате
@@ -71,6 +77,7 @@ def room_join(message):
             room.start_game()
 
 
+@channel_session_user
 def room_leave(message):
     """
     Реакция при отсоединении от комнаты
@@ -90,6 +97,7 @@ def room_leave(message):
     room.update_user_group()
 
 
+@channel_session_user
 def room_answer(message):
     """
     Реакция на пришедший ответ от пользователя

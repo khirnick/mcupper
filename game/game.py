@@ -39,7 +39,7 @@ class Game:
         """
 
         for room in self.rooms:
-            if not room.is_busy:
+            if not room.is_busy and not room.game_is_online:
                 return room
 
         new_room = self.add_room()

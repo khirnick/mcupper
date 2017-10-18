@@ -1,21 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container white-text" style="text-align: center;">
-    <h4>Вы находитесь в комнате <p style="display: inline" id="room">{{ room.id }}</p></h4>
-    <h5 id="user-group"></h5>
+    {% if user.is_anonymous %}
+        <div class="container white-text" style="text-align: center;">
+            <h5>Неавторизованные пользователи не могут играть</h5>
+        </div>
+    {% else %}
+        <div class="container white-text" style="text-align: center;">
+            <h4>Вы находитесь в комнате <p style="display: inline" id="room">{{ room.id }}</p></h4>
 
-    <h5 id="game-result-for-user"></h5>
+            <h5 id="user-group"></h5>
 
-    <div id="manage-buttons">
-        <button class="btn btn-large waves-effect" id="connect-to-room">Присоединиться</button>
-        <button class="btn btn-large waves-effect" id="leave-room">Покинуть</button>
-    </div>
+            <h5 id="game-result-for-user"></h5>
 
-    <div id="link-to-final-room"></div>
+            <div id="manage-buttons">
+                <button class="btn btn-large waves-effect" id="connect-to-room">Присоединиться</button>
+                <button class="btn btn-large waves-effect" id="leave-room">Покинуть</button>
+            </div>
 
-    <div id="game" class="container"></div>
-</div>
+            <div id="link-to-final-room"></div>
+
+            <div id="game" class="container"></div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block script_block %}
