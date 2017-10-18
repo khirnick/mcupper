@@ -87,7 +87,6 @@ class Room:
         """
 
         if self.is_busy:
-            print('is busy')
             user_channel.send({'text': json.dumps({'room_is_already_busy': True})})
             return False
 
@@ -251,9 +250,13 @@ class Room:
         if self.type == Room.DEFAULT_NAME:
             final_room = self.__game_manager_ref.get_final_game().is_free_rooms()
 
-            self.__game_manager_ref.add_user_id_to_final_room(self.id, user_id_winner)
+            if final_room is None:
+                self.send_to_user_over_websocket_by_id(user_id_winner, {'user_is_winner': True,
+                                                                        'final_rooms_are_exhausted': True})
 
             final_room_id = final_room.id
+
+            self.__game_manager_ref.add_user_id_to_final_room(final_room_id, user_id_winner)
 
             url_to_final_room = settings.ROOM_URLS['final_room'] + str(final_room_id)
             self.send_to_user_over_websocket_by_id(user_id_winner, {'user_is_winner': True,
