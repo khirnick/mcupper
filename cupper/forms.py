@@ -8,9 +8,11 @@ class SignupForm(forms.Form):
     Форма регистрации
     """
 
-    username = forms.CharField(max_length=30, label='Логин',
-                               help_text='Логин должен состоять не более чем из 30 сиволов',
-                               widget=forms.TextInput(attrs={'placeholder': 'Логин'}))
+    username = forms.RegexField(max_length=30, label='Логин', regex=r'^[\w.@+-]+$',
+                                help_text='Логин должен состоять не более чем из 30 сиволов',
+                                error_messages = {'invalid': 'Логин не может содержать спец. символы'},
+                                widget=forms.TextInput(attrs={'placeholder': 'Логин'}))
+
     email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'email@domain.com'}),
                              label='Email', help_text='Введите Ваш e-mail')
 
@@ -137,7 +139,8 @@ class ProfileSettingsForm(forms.Form):
     new_password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}), label='Пароль',
                                    help_text='Пароль должен содержать минимум 4 символа')
 
-    new_password_check = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Повторите пароль'}), label='Пароль',
+    new_password_check = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Повторите пароль'}),
+                                         label='Пароль',
                                          help_text='Пароль должен содержать минимум 4 символа')
 
     def __init__(self, user, *args, **kwargs):
