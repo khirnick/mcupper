@@ -1,19 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for news in news_list %}
-        <p>{{ news }}</p>
-    {% endfor %}
+    <div class="container white-text">
+        {% for news in news_list %}
+            <h5><b>{{ news }}</b></h5>
+            <p>{{ news.description }}</p>
+            <p style="text-align: right">Добавлено: {{ news.created_at }}</p>
+            {% if news != news_list|last %}
+                <hr/>
+            {% endif %}
+        {% endfor %}
+    </div>
 
-    <div id="pagination">
+    <div id="pagination" style="text-align: center" class="white-text">
         {% if news_list.has_previous %}
-            <a href="?page={{ news_list.previous_page_number }}">Previous</a>
+            <a href="?page={{ news_list.previous_page_number }}"><</a>
         {% endif %}
 
-        <p>Page {{ news_list.number }} of {{ news_list.paginator.num_pages }}</p>
+        {{ news_list.number }} из {{ news_list.paginator.num_pages }}
 
         {% if news_list.has_next %}
-            <a href="?page={{ news_list.next_page_number }}">Next</a>
+            <a href="?page={{ news_list.next_page_number }}">></a>
         {% endif %}
     </div>
 {% endblock %}
