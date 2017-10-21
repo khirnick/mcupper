@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for news in news_list %}
+        <p>{{ news }}</p>
+    {% endfor %}
+
+    <div id="pagination">
+        {% if news_list.has_previous %}
+            <a href="?page={{ news_list.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <p>Page {{ news_list.number }} of {{ news_list.paginator.num_pages }}</p>
+
+        {% if news_list.has_next %}
+            <a href="?page={{ news_list.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
+{% endblock %}

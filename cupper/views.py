@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -10,7 +11,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from cupper.forms import SignupForm, LoginForm, ProfileSettingsForm
-from cupper.models import Profile
+from cupper.models import Profile, News
 from cupper.token_registration import token_registration
 
 
@@ -202,3 +203,18 @@ def best(request):
     print(best_users)
 
     return render(request, 'cupper/best.html', {'best_users': best_users})
+
+
+def news(request):
+    news_list = News.objects.all()
+    paginator = Paginator(news_list, 2)
+
+    page = request.GET.get('page')
+    try:
+        news_current = paginator.page(page)
+    except PageNotAnInteger:
+        news_current = paginator.page(1)
+    except EmptyPage:
+        news_current = paginator.page(paginator.num_pages)
+
+    return render(request, 'cupper/news.html', {'news_list': news_current})

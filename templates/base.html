@@ -20,7 +20,7 @@
     <div class="nav-wrapper blue darken-4">
         <a href="{% url 'cupper:index' %}" class="brand-logo center" style="margin-top: 0.4%"><img src="/media/icons/cup.png" width="6%" /></a>
         <ul id="nav-mobile" class="left hide-on-med-and-down">
-            <li><a href="#">Новости</a></li>
+            <li><a href="{% url 'cupper:news' %}">Новости</a></li>
             <li><a href="{% url 'cupper:best' %}">Таблица рекордов</a></li>
             <li><a href="{% url 'cupper:game_rules' %}">Правила игры</a></li>
         </ul>
