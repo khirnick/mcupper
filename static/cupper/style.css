@@ -2,7 +2,7 @@
     background-color: #1b5e20;
 }
 
-.container {
+.main-container {
     margin-top: 5%;
 }
 
@@ -10,6 +10,19 @@
     background-color: #4caf50;
 }
 
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+.page-footer {
+    margin-top: 150px;
+}
 
 .btn:enabled {
     background-color: #4caf50;
@@ -18,14 +31,17 @@
 ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
     color:    #fff;
 }
+
 :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
    color:    #fff;
    opacity:  1;
 }
+
 ::-moz-placeholder { /* Mozilla Firefox 19+ */
    color:    #fff;
    opacity:  1;
 }
+
 :-ms-input-placeholder { /* Internet Explorer 10-11 */
    color:    #fff;
 }
