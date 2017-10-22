@@ -17,8 +17,13 @@ class Profile(models.Model):
 
     @staticmethod
     def get_best_users():
+        """
+        Получить 5 лучших игроков
+        :return: объект игроков
+        """
+
         users = Profile.objects.order_by('-score')[:5]
-        print(users)
+
         return users
 
 
@@ -41,7 +46,9 @@ class News(models.Model):
         :return: объект новостей
         """
 
-        news = News.objects.filter('-created_at')
+        news = News.objects.order_by('-created_at')
+
+        return news
 
 
 @receiver(post_save, sender=User)
@@ -53,7 +60,6 @@ def create_user_profile(sender, instance, created, **kwargs):
     :param sender: отправитель
     :param instance: объект пользователя
     :param created: если создан - True/False
-    :return:
     """
 
     if created:

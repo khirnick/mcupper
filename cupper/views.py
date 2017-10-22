@@ -206,7 +206,7 @@ def best(request):
 
 
 def news(request):
-    news_list = News.objects.all()
+    news_list = News.get_news_by_relevance()
     paginator = Paginator(news_list, 2)
 
     page = request.GET.get('page')
